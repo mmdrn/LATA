@@ -1,0 +1,44 @@
+import { Body, Controller, Post, Query } from "@nestjs/common";
+import { Interval } from "./../../Enums";
+import { MapIntervalToBinanceKlineInterval } from "./../../Mappers";
+import { BinanceService } from "./../../Services/BinanceService";
+import { APIResponse } from "./../../Types/APIResponse.interface";
+
+@Controller("strategies")
+export class StrategiesController {
+    constructor(private readonly binanceService: BinanceService) { }
+
+    @Post("find-symbols-by-strategies")
+    async findSymbolsByStrategies(
+        @Query("exchange") exchange,
+        @Query("quoteAsset") quoteAsset,
+        @Query("interval") interval: string,
+        @Body("strategies") strategies: number[]
+    ): Promise<APIResponse> {
+        let _interval: string;
+        try {
+            _interval = MapIntervalToBinanceKlineInterval(Interval[interval])
+        } catch (error) {
+            return {
+                success: false,
+                message: "this is an invalid interval.",
+                data: null,
+            };
+        }
+
+        if (strategies.length < 1) {
+            return {
+                success: false,
+                message: "please enter one or more strategy.",
+                data: null,
+            };
+        }
+
+        if (strategies.includes(11001)) {
+            console.log(strategies);
+        }
+
+
+
+    }
+}

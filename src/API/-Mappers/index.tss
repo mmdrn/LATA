@@ -1,0 +1,63 @@
+import { Interval } from "./../Enums";
+import { CreateCandle } from "./../Services/BinanceService/Types";
+
+export function MapIntervalToBinanceKlineInterval(interval: number): string {
+    if (!Interval[interval]) throw new TypeError(`${interval} is an invalid interval.`);
+
+    switch (interval) {
+        case 0:
+            return "1m"
+        case 1:
+            return "3m"
+        case 2:
+            return "5m"
+        case 3:
+            return "15m"
+        case 4:
+            return "30m"
+        case 5:
+            return "1h"
+        case 6:
+            return "2h"
+        case 7:
+            return "4h"
+        case 8:
+            return "6h"
+        case 9:
+            return "8h"
+        case 10:
+            return "12h"
+        case 11:
+            return "1d"
+        case 12:
+            return "3d"
+        case 13:
+            return "1w"
+        case 14:
+            return "1M"
+    }
+}
+
+export function MapBinanceKlineToCreateCandle(source: Object[], symbol: string): CreateCandle[] {
+    const candles: CreateCandle[] = [];
+
+    for (const candle of source) {
+        candles.push({
+            symbol: symbol,
+            openTime: candle[0],
+            openPrice: candle[1],
+            highPrice: candle[2],
+            lowPrice: candle[3],
+            closePrice: candle[4],
+            volume: candle[5],
+            closeTime: candle[6],
+            quoteAssetVolume: candle[7],
+            numberOfTrades: candle[8],
+            takerBuyBaseAssetVolume: candle[9],
+            takerBuyQuoteAssetVolume: candle[10],
+            usedField: candle[11],
+        });
+    }
+
+    return candles;
+}

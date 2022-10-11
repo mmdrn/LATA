@@ -1,0 +1,107 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { MainClient, SymbolExchangeInfo, ExchangeInfo } from 'binance';
+import { Model } from 'mongoose';
+import { CandleDocument } from 'src/Schemas/Candle.Schema';
+import { SymbolDocument } from 'src/Schemas/Symbol.Schema';
+import { CreateCandle, CreateMetas, CreateSymbol } from './Types';
+
+@Injectable()
+export class BinanceService {
+
+    constructor(
+        @InjectModel(Symbol.name) private readonly symbolModel: Model<SymbolDocument>,
+        @InjectModel("OneHourCandles") private readonly oneHourCandleModel: Model<CandleDocument>
+    ) { }
+
+    //  --------- Remote Methods
+    async FetchSymbolsListFromRemote(): Promise<SymbolExchangeInfo[]> {
+        try {
+            const client = new MainClient({});
+            const response: ExchangeInfo = await client.getExchangeInfo();
+            return response.symbols;
+        } catch (error) {
+            console.error("can't fetch symbols from exchange(binance)!!", error);
+        }
+    }
+
+    async FetchSymbolCandlesFromRemote(symbol: string, startTime: number, interval: string, limit: number = 1000): Promise<(string | number)[]> {
+        try {
+            const clinet = new MainClient({});
+            const result = await clinet.getKlines({
+                symbol: symbol.toUpperCase(),
+                interval: "1h",
+                startTime,
+                limit
+            });
+
+            return result;
+        } catch (error) {
+            console.error("can't fetch symbol's candles from exchange(binance)!!", error);
+        }
+    }
+
+    //  --------- Local Methods
+    async FindAllSymbolsFromLocal(): Promise<SymbolDocument[]> {
+        const symbols = await this.symbolModel.find().exec();
+        return symbols;
+    }
+
+    async CreateSymbol(symbol: CreateSymbol): Promise<any> {
+        const createdSymbol = new this.symbolModel(symbol);
+        return createdSymbol.save()
+    }
+
+    async CreateSymbols(symbols: CreateSymbol[]): Promise<SymbolDocument[]> {
+        const _symbols = await this.symbolModel.create(symbols)
+        return await this.symbolModel.insertMany(_symbols);
+    }
+
+    async DeleteSymbols(query: Object): Promise<any> {
+        const result = await this.symbolModel.deleteMany({ query })
+        return result
+    }
+
+    async AddCandlesToSymbol(candles: CreateCandle[], interval: string): Promise<CandleDocument[]> {
+        try {
+            const _candles = await this.oneHourCandleModel.create(candles);
+            return _candles
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async GetLatestCandleCloseTime(symbol: string, interval: string): Promise<number> {
+        const symbols = await this.oneHourCandleModel.find({ symbol: symbol }).sort(
+            {
+                openTime: 'desc',
+            }
+        ).exec();
+
+        if (symbols.length > 0) return symbols[0].closeTime;
+
+        return null;
+    }
+
+    async GetPreviousCandleByCloseTime(symbol: string, interval: string, closeTime: number): Promise<any> {
+        const candles = await this.oneHourCandleModel.find({
+            symbol: symbol,
+            closeTime: { $lt: closeTime }
+        }).sort({
+            closeTime: "desc"
+        }).exec();
+
+        if (candles.length > 0) return candles[0];
+
+        return null;
+    }
+
+    async AddCandleMetas(metas: CreateMetas[], interval: string): Promise<any> {
+        try {
+            const _metas = await this.oneHourCandleModel.create(metas);
+            return _metas
+        } catch (error) {
+            console.error(error)
+        }
+    }
+}

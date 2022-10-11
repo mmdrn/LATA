@@ -1,0 +1,53 @@
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+
+export type CandleDocument = Candle & Document;
+
+@Schema()
+export class Candle {
+    @Prop(
+        {
+            lowercase: true,
+            trim: true,
+        }
+    )
+    symbol: string;
+
+    @Prop()
+    openTime: number;
+
+    @Prop()
+    openPrice: number;
+
+    @Prop()
+    highPrice: number;
+
+    @Prop()
+    lowPrice: number;
+
+    @Prop()
+    closePrice: number;
+
+    @Prop()
+    volume: number;
+
+    @Prop()
+    closeTime: number;
+
+    @Prop()
+    quoteAssetVolume: number;
+
+    @Prop()
+    numberOfTrades: number;
+
+    @Prop()
+    takerBuyBaseAssetVolume: number;
+
+    @Prop()
+    takerBuyQuoteAssetVolume: number;
+
+    @Prop()
+    usedField: number;
+}
+
+export const CandleSchema = SchemaFactory.createForClass(Candle);

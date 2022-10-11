@@ -1,0 +1,23 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+
+export type SymbolDocument = Symbol & Document;
+
+@Schema()
+export class Symbol {
+  @Prop(
+    {
+      lowercase: true,
+      trim: true,
+    }
+  )
+  symbol: string;
+
+  @Prop()
+  baseAsset: string;
+
+  @Prop()
+  quoteAsset: string;
+}
+
+export const SymbolSchema = SchemaFactory.createForClass(Symbol);

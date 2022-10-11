@@ -1,0 +1,19 @@
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose, { Document } from 'mongoose';
+import { Candle } from './Candle.Schema';
+
+export type CandleMetasDocument = CandleMetas & Document;
+
+@Schema()
+export class CandleMetas {
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Candle' })
+    candle: Candle;
+
+    @Prop()
+    rsi: number;
+
+    @Prop()
+    difference: number;
+}
+
+export const CandleMetasSchema = SchemaFactory.createForClass(CandleMetas);
