@@ -26,8 +26,11 @@ export class FetchCandlesProcessor {
     concurrency: 3
   })
   async OneMinute(job: Job) {
+    console.log("One Minute", job);
+
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.OneMinute;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -37,6 +40,7 @@ export class FetchCandlesProcessor {
   async ThreeMinutes(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.ThreeMinutes;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -46,6 +50,7 @@ export class FetchCandlesProcessor {
   async FiveMinutes(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.FiveMinutes;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -55,6 +60,7 @@ export class FetchCandlesProcessor {
   async FifteenMinutes(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.FifteenMinutes;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -64,6 +70,7 @@ export class FetchCandlesProcessor {
   async ThirtyMinutes(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.ThirtyMinutes;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -73,6 +80,7 @@ export class FetchCandlesProcessor {
   async OneHour(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.OneHour;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -82,6 +90,7 @@ export class FetchCandlesProcessor {
   async TwoHour(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.TwoHour;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -91,6 +100,7 @@ export class FetchCandlesProcessor {
   async FourHour(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.FourHour;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -100,6 +110,7 @@ export class FetchCandlesProcessor {
   async SixHour(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.SixHour;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -109,6 +120,7 @@ export class FetchCandlesProcessor {
   async EightHour(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.EightHour;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -118,6 +130,7 @@ export class FetchCandlesProcessor {
   async TwelveHour(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.TwelveHour;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -127,6 +140,7 @@ export class FetchCandlesProcessor {
   async OneDay(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.OneDay;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -136,6 +150,7 @@ export class FetchCandlesProcessor {
   async ThreeDay(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.ThreeDay;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -145,6 +160,7 @@ export class FetchCandlesProcessor {
   async OneWeek(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.OneWeek;
+    return await this.fetch(symbol, _interval);
   }
 
   @Process({
@@ -154,60 +170,33 @@ export class FetchCandlesProcessor {
   async OneMonth(job: Job) {
     const symbol = job.data.symbol;
     const _interval: Interval = Interval.OneMonth;
+    return await this.fetch(symbol, _interval);
   }
 
   private async fetch(symbol: Symbol, interval: Interval) {
-
-  }
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  @Process({
-    name: "1",
-    concurrency: 3
-  })
-  async oneHourQueue(job: Job) {
-    const symbol = job.data.symbol;
-    const _interval = Interval.OneHour;
-
     this.logger.debug(`fetching candles of ${symbol.symbol} ----------------------------`);
     let addedCandleCount: number = 0;
     let fetchedCandles: Candle[];
     let storedCandles: Candle[];
     let startTime: number;
 
-    startTime = await this.candleService.calculateStartTimeDependingOnTheLatestExistingCandle(symbol.symbol, _interval);
-    fetchedCandles = await this.candleService.fetchCandles(symbol.symbol, _interval, startTime, 1000);
+    startTime = await this.candleService.calculateStartTimeDependingOnTheLatestExistingCandle(symbol.symbol, interval);
+    fetchedCandles = await this.candleService.fetchCandles(symbol.symbol, interval, startTime, 1000);
 
     if (fetchedCandles.length < 1) {
       this.logger.debug(`fetching candles done with 0 new candles for ${symbol.symbol}.`);
       return false;
     }
 
-    storedCandles = await this.candleService.storeCandles(fetchedCandles, _interval);
+    storedCandles = await this.candleService.storeCandles(fetchedCandles, interval);
     this.logger.debug(`storing candles done with ${storedCandles.length} new candles for ${symbol.symbol}.`);
     addedCandleCount += storedCandles.length;
 
     while (fetchedCandles.length === 1000) {
-      startTime = await this.candleService.calculateStartTimeDependingOnTheLatestExistingCandle(symbol.symbol, _interval);
-      fetchedCandles = await this.candleService.fetchCandles(symbol.symbol, _interval, startTime, 1000);
+      startTime = await this.candleService.calculateStartTimeDependingOnTheLatestExistingCandle(symbol.symbol, interval);
+      fetchedCandles = await this.candleService.fetchCandles(symbol.symbol, interval, startTime, 1000);
       this.logger.debug(`fetching candles done with ${fetchedCandles.length} new candles for ${symbol.symbol}.`);
-      storedCandles = storedCandles.concat(await this.candleService.storeCandles(fetchedCandles, _interval));
+      storedCandles = storedCandles.concat(await this.candleService.storeCandles(fetchedCandles, interval));
       this.logger.debug(`storing candles done with ${storedCandles.length} new candles for ${symbol.symbol}.`);
       addedCandleCount += storedCandles.length;
     }
@@ -215,4 +204,60 @@ export class FetchCandlesProcessor {
 
     return true;
   }
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  // @Process({
+  //   name: "1",
+  //   concurrency: 3
+  // })
+  // async oneHourQueue(job: Job) {
+  //   const symbol = job.data.symbol;
+  //   const _interval = Interval.OneHour;
+
+  //   this.logger.debug(`fetching candles of ${symbol.symbol} ----------------------------`);
+  //   let addedCandleCount: number = 0;
+  //   let fetchedCandles: Candle[];
+  //   let storedCandles: Candle[];
+  //   let startTime: number;
+
+  //   startTime = await this.candleService.calculateStartTimeDependingOnTheLatestExistingCandle(symbol.symbol, _interval);
+  //   fetchedCandles = await this.candleService.fetchCandles(symbol.symbol, _interval, startTime, 1000);
+
+  //   if (fetchedCandles.length < 1) {
+  //     this.logger.debug(`fetching candles done with 0 new candles for ${symbol.symbol}.`);
+  //     return false;
+  //   }
+
+  //   storedCandles = await this.candleService.storeCandles(fetchedCandles, _interval);
+  //   this.logger.debug(`storing candles done with ${storedCandles.length} new candles for ${symbol.symbol}.`);
+  //   addedCandleCount += storedCandles.length;
+
+  //   while (fetchedCandles.length === 1000) {
+  //     startTime = await this.candleService.calculateStartTimeDependingOnTheLatestExistingCandle(symbol.symbol, _interval);
+  //     fetchedCandles = await this.candleService.fetchCandles(symbol.symbol, _interval, startTime, 1000);
+  //     this.logger.debug(`fetching candles done with ${fetchedCandles.length} new candles for ${symbol.symbol}.`);
+  //     storedCandles = storedCandles.concat(await this.candleService.storeCandles(fetchedCandles, _interval));
+  //     this.logger.debug(`storing candles done with ${storedCandles.length} new candles for ${symbol.symbol}.`);
+  //     addedCandleCount += storedCandles.length;
+  //   }
+  //   this.logger.debug(`${addedCandleCount} new candles stored for ${symbol.symbol}`);
+
+  //   return true;
+  // }
 }
