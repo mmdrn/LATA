@@ -73,53 +73,68 @@ export default class CandleDBRepository implements ICandleDBRepository {
 
     async storeCandle(candles: CreateCandle[], interval: Interval): Promise<CandleModel[]> {
         let storedCandles;
-        const mappedCandles = MapCreateCandlesToCandleEntities(candles);
+        const mappedCandles = MapCreateCandlesToCandleEntities(candles, interval);
 
         switch (interval) {
             case Interval.OneMinute: {
                 storedCandles = await this.oneMinuteCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.ThreeMinutes: {
                 storedCandles = await this.threeMinutesCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.FiveMinutes: {
                 storedCandles = await this.fiveMinutesCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.FifteenMinutes: {
                 storedCandles = await this.fifteenMinutesCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.ThirtyMinutes: {
                 storedCandles = await this.thirtyMinutesCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.OneHour: {
                 storedCandles = await this.oneHourCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.TwoHour: {
                 storedCandles = await this.twoHoursCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.FourHour: {
                 storedCandles = await this.fourHoursCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.SixHour: {
                 storedCandles = await this.sixHoursCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.EightHour: {
                 storedCandles = await this.eightHoursCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.TwelveHour: {
                 storedCandles = await this.twelveHoursCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.OneDay: {
                 storedCandles = await this.oneDayCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.ThreeDay: {
                 storedCandles = await this.threeDaysCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.OneWeek: {
                 storedCandles = await this.oneWeekCandlesRepository.save(mappedCandles);
+                break;
             }
             case Interval.OneMonth: {
                 storedCandles = await this.oneMonthCandlesRepository.save(mappedCandles);
+                break;
             }
         }
 
@@ -144,53 +159,68 @@ export default class CandleDBRepository implements ICandleDBRepository {
         switch (interval) {
             case Interval.OneMinute: {
                 candles = await this.oneMinuteCandlesRepository.find(query);
+                break;
             }
             case Interval.ThreeMinutes: {
                 candles = await this.threeMinutesCandlesRepository.find(query);
+                break;
             }
             case Interval.FiveMinutes: {
                 candles = await this.fiveMinutesCandlesRepository.find(query);
+                break;
             }
             case Interval.FifteenMinutes: {
                 candles = await this.fifteenMinutesCandlesRepository.find(query);
+                break;
             }
             case Interval.ThirtyMinutes: {
                 candles = await this.thirtyMinutesCandlesRepository.find(query);
+                break;
             }
             case Interval.OneHour: {
                 candles = await this.oneHourCandlesRepository.find(query);
+                break;
             }
             case Interval.TwoHour: {
                 candles = await this.twoHoursCandlesRepository.find(query);
+                break;
             }
             case Interval.FourHour: {
                 candles = await this.fourHoursCandlesRepository.find(query);
+                break;
             }
             case Interval.SixHour: {
                 candles = await this.sixHoursCandlesRepository.find(query);
+                break;
             }
             case Interval.EightHour: {
                 candles = await this.eightHoursCandlesRepository.find(query);
+                break;
             }
             case Interval.TwelveHour: {
                 candles = await this.twelveHoursCandlesRepository.find(query);
+                break;
             }
             case Interval.OneDay: {
                 candles = await this.oneDayCandlesRepository.find(query);
+                break;
             }
             case Interval.ThreeDay: {
                 candles = await this.threeDaysCandlesRepository.find(query);
+                break;
             }
             case Interval.OneWeek: {
                 candles = await this.oneWeekCandlesRepository.find(query);
+                break;
             }
             case Interval.OneMonth: {
                 candles = await this.oneMonthCandlesRepository.find(query);
+                break;
             }
         }
 
         if (candles.length > 0) return candles[0].closeTime;
-        
+
         return null;
     }
 }

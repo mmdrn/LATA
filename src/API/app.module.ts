@@ -20,20 +20,21 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CandleTasksService } from './Tasks/Candle.task';
 import { BullModule } from '@nestjs/bull';
 import { FetchCandlesProcessor } from './Processors/Candle.processor';
-import OneMinuteCandle from 'src/DAL/Entities/OneMinuteCandle.entity';
-import ThreeMinutesCandle from 'src/DAL/Entities/ThreeMinutesCandle.entity';
-import FiveMinutesCandle from 'src/DAL/Entities/FiveMinutesCandle.entity';
-import FifteenMinutesCandle from 'src/DAL/Entities/FifteenMinutesCandle.entity';
-import ThirtyMinutesCandle from 'src/DAL/Entities/ThirtyMinutesCandle.entity';
-import TwoHoursCandle from 'src/DAL/Entities/TwoHoursCandle.entity';
-import FourHoursCandle from 'src/DAL/Entities/FourHoursCandle.entity';
-import SixHoursCandle from 'src/DAL/Entities/SixHoursCandle.entity';
-import EightHoursCandle from 'src/DAL/Entities/EightHoursCandle.entity';
-import TwelveHoursCandle from 'src/DAL/Entities/TwelveHoursCandle.entity';
-import OneDayCandle from 'src/DAL/Entities/OneDayCandle.entity';
-import ThreeDaysCandle from 'src/DAL/Entities/ThreeDaysCandle.entity';
-import OneWeekCandle from 'src/DAL/Entities/OneWeekCandle.entity';
-import OneMonthCandle from 'src/DAL/Entities/OneMonthCandle.entity';
+import OneMinuteCandle from './../DAL/Entities/OneMinuteCandle.entity';
+import ThreeMinutesCandle from './../DAL/Entities/ThreeMinutesCandle.entity';
+import FiveMinutesCandle from './../DAL/Entities/FiveMinutesCandle.entity';
+import FifteenMinutesCandle from './../DAL/Entities/FifteenMinutesCandle.entity';
+import ThirtyMinutesCandle from './../DAL/Entities/ThirtyMinutesCandle.entity';
+import TwoHoursCandle from './../DAL/Entities/TwoHoursCandle.entity';
+import FourHoursCandle from './../DAL/Entities/FourHoursCandle.entity';
+import SixHoursCandle from './../DAL/Entities/SixHoursCandle.entity';
+import EightHoursCandle from './../DAL/Entities/EightHoursCandle.entity';
+import TwelveHoursCandle from './../DAL/Entities/TwelveHoursCandle.entity';
+import OneDayCandle from './../DAL/Entities/OneDayCandle.entity';
+import ThreeDaysCandle from './../DAL/Entities/ThreeDaysCandle.entity';
+import OneWeekCandle from './../DAL/Entities/OneWeekCandle.entity';
+import OneMonthCandle from './../DAL/Entities/OneMonthCandle.entity';
+import { OnTheFlyController } from './Controllers/Candles.controller';
 
 
 @Module({
@@ -84,7 +85,8 @@ import OneMonthCandle from 'src/DAL/Entities/OneMonthCandle.entity';
   ],
   controllers: [
     AppController,
-    SymbolsController
+    SymbolsController,
+    OnTheFlyController
   ],
   providers: [
     Binance_SymbolService,
@@ -99,7 +101,7 @@ import OneMonthCandle from 'src/DAL/Entities/OneMonthCandle.entity';
     ExchangeAPIRepository,
     Binance_ExchangeAPIRepository,
     CandleTasksService,
-    FetchCandlesProcessor
+    FetchCandlesProcessor,
   ]
 })
 export class AppModule { }
