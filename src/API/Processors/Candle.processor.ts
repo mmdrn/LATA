@@ -198,6 +198,7 @@ export class FetchCandlesProcessor {
 
     startTime = await this.candleService.calculateStartTimeDependingOnTheLatestExistingCandle(symbol.symbol, interval);
     fetchedCandles = await this.candleService.fetchCandles(symbol.symbol, interval, startTime, 1000);
+    this.logger.log(`fetched candles report. symbol: ${symbol.symbol}, interval: ${interval}, count: ${fetchedCandles.length}`);
 
     if (fetchedCandles.length < 1) {
       return false;
@@ -210,10 +211,13 @@ export class FetchCandlesProcessor {
     while (fetchedCandles.length === 1000) {
       startTime = await this.candleService.calculateStartTimeDependingOnTheLatestExistingCandle(symbol.symbol, interval);
       fetchedCandles = await this.candleService.fetchCandles(symbol.symbol, interval, startTime, 1000);
+      this.logger.log(`fetched candles report. symbol: ${symbol.symbol}, interval: ${interval}, count: ${fetchedCandles.length}`);
       mappedCandles = MapCandlesToCreateCandles(fetchedCandles);
       storedCandles = storedCandles.concat(await this.candleService.storeCandles(mappedCandles, interval));
       addedCandleCount += storedCandles.length;
     }
+
+    this.logger.log(`finished storing candle. symbol: ${symbol.symbol}, interval: ${interval}, count: ${addedCandleCount}`);
 
     return true;
   }
