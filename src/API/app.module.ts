@@ -35,6 +35,7 @@ import ThreeDaysCandle from './../DAL/Entities/ThreeDaysCandle.entity';
 import OneWeekCandle from './../DAL/Entities/OneWeekCandle.entity';
 import OneMonthCandle from './../DAL/Entities/OneMonthCandle.entity';
 import { OnTheFlyController } from './Controllers/Candles.controller';
+import { BullMonitorModule } from './BullMonitor/bull-monitor-module';
 
 
 @Module({
@@ -63,6 +64,7 @@ import { OnTheFlyController } from './Controllers/Candles.controller';
     BullModule.registerQueue({
       name: 'fetch-candles-queue',
     }),
+    BullMonitorModule,
     TypeOrmModule.forFeature([
       Symbol,
       OneMinuteCandle,
@@ -101,7 +103,7 @@ import { OnTheFlyController } from './Controllers/Candles.controller';
     ExchangeAPIRepository,
     Binance_ExchangeAPIRepository,
     CandleTasksService,
-    FetchCandlesProcessor,
+    FetchCandlesProcessor
   ]
 })
 export class AppModule { }
