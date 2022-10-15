@@ -10,6 +10,6 @@ export class BullMonitorModule implements NestModule {
     constructor(private monitor: BullMonitorService) { }
     async configure(consumer: MiddlewareConsumer) {
         await this.monitor.init();
-        consumer.apply(this.monitor.router).forRoutes('/bull-monitor');
+        consumer.apply(this.monitor.router).forRoutes('/queue-monitoring');
     }
 }
