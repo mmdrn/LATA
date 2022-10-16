@@ -4,45 +4,46 @@ import SymbolService from "../../BLL/Services/Symbol.service";
 import { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 import CandleService from "../../BLL/Services/Candle.service";
-import { Interval } from "../../BLL/Enums/Interval.enum";
 
-@Controller("onthefly")
-export class OnTheFlyController {
+@Controller("littleshit")
+export class LittleShitController {
     constructor(
         private readonly symbolService: SymbolService,
         private readonly candleService: CandleService,
-        @InjectQueue("fetch-candles-queue") private readonly fetchCandlesQueue: Queue
+        @InjectQueue("FourHoursCandle") private readonly fourHoursCandleQueue: Queue
     ) { }
 
-    @Post("zerofly")
+    @Post("shit")
     async ZeroFly(): Promise<any> {
         this.symbolService.setExchange(Exchanges.Binance);
         this.candleService.setExchange(Exchanges.Binance);
 
-        const symbols = await this.symbolService.findAllSymbols(undefined);
-
+        const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
+        await this.fourHoursCandleQueue.pause();
+        await this.fourHoursCandleQueue.empty();
         for (const symbol of symbols) {
-            this.fetchCandlesQueue.add(Interval.FourHour.toString(), {
+            await this.fourHoursCandleQueue.add("default_queue", {
                 symbol: symbol,
             })
         }
+        await this.fourHoursCandleQueue.resume();
     }
 
     @Post("clearqueue")
     async ClearQueue(): Promise<any> {
-        const result = await this.fetchCandlesQueue.empty()
+        const result = await this.fourHoursCandleQueue.empty()
         return result
     }
 
     @Post("pausequeue")
     async PauseQueue(): Promise<any> {
-        const result = await this.fetchCandlesQueue.pause()
+        const result = await this.fourHoursCandleQueue.pause()
         return result
     }
 
     @Post("startqueue")
     async StartQueue(): Promise<any> {
-        const result = await this.fetchCandlesQueue.resume()
+        const result = await this.fourHoursCandleQueue.resume()
         return result
     }
 }

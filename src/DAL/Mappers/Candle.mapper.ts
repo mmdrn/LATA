@@ -1,5 +1,5 @@
-import { Interval } from "src/BLL/Enums/Interval.enum";
-import CreateCandle from "src/BLL/Models/CreateCandle.model";
+import { Interval } from "../../BLL/Enums/Interval.enum";
+import CreateCandle from "../../BLL/Models/CreateCandle.model";
 import EightHoursCandle from "../Entities/EightHoursCandle.entity";
 import FifteenMinutesCandle from "../Entities/FifteenMinutesCandle.entity";
 import FiveMinutesCandle from "../Entities/FiveMinutesCandle.entity";

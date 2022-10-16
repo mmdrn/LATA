@@ -12,7 +12,7 @@ export class CandleTasksService {
     constructor(
         private readonly symbolService: SymbolService,
         private readonly candleService: CandleService,
-        @InjectQueue("fetch-candles-queue") private readonly fetchCandlesQueue: Queue
+        // @InjectQueue("fetch-candles-queue") private readonly fetchCandlesQueue: Queue
     ) { }
 
     private readonly logger = new Logger(CandleTasksService.name);

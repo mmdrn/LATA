@@ -36,7 +36,7 @@ export default class Binance_SymbolService implements ISymbolService {
         }
     }
 
-    async findAllSymbols(quoteAsset: string): Promise<Symbol[]> {
-        return this.symbolsRepository.findAllSymbols(quoteAsset);
+    async findAllSymbols(quoteAsset: string, status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"): Promise<Symbol[]> {
+        return this.symbolsRepository.findAllSymbols(quoteAsset, status);
     }
 }

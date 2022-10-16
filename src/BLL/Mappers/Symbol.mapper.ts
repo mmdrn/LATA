@@ -10,7 +10,17 @@ export function MapSymbolExchangeInfoToSymbol(symbols: SymbolExchangeInfo[]): Sy
             id: null,
             symbol: symbol.symbol,
             baseAsset: symbol.baseAsset,
-            quoteAsset: symbol.quoteAsset
+            quoteAsset: symbol.quoteAsset,
+            status: symbol.status,
+            quotePrecision: symbol.quoteAssetPrecision,
+            baseAssetPrecision: symbol.baseAssetPrecision,
+            quoteAssetPrecision: symbol.quoteAssetPrecision,
+            orderTypes: symbol.orderTypes,
+            icebergAllowed: symbol.icebergAllowed,
+            ocoAllowed: symbol.icebergAllowed,
+            isSpotTradingAllowed: symbol.isSpotTradingAllowed,
+            isMarginTradingAllowed: symbol.isMarginTradingAllowed,
+            permissions: symbol.permissions,
         })
     }
 
@@ -24,7 +34,17 @@ export function MapSymbolsToCreateSymbols(symbols: Symbol[]): CreateSymbol[] {
         mappedSymbols.push({
             symbol: symbol.symbol,
             baseAsset: symbol.baseAsset,
-            quoteAsset: symbol.quoteAsset
+            quoteAsset: symbol.quoteAsset,
+            baseAssetPrecision: symbol.baseAssetPrecision,
+            icebergAllowed: symbol.icebergAllowed,
+            isMarginTradingAllowed: symbol.isMarginTradingAllowed,
+            isSpotTradingAllowed: symbol.isSpotTradingAllowed,
+            ocoAllowed: symbol.ocoAllowed,
+            orderTypes: symbol.orderTypes,
+            permissions: symbol.permissions,
+            quoteAssetPrecision: symbol.quoteAssetPrecision,
+            quotePrecision: symbol.quotePrecision,
+            status: symbol.status
         })
     }
 

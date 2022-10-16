@@ -49,9 +49,10 @@ export default class SymbolDBRepository implements ISymbolDBRepository {
         return result;
     }
 
-    async findAllSymbols(quoteAsset: string): Promise<Symbol[]> {
+    async findAllSymbols(quoteAsset: string, status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"): Promise<Symbol[]> {
         const query: object = {};
         if (quoteAsset) query["where"] = { quoteAsset }
+        if (status) query["where"] = { status }
         const result = await this.symbolsRepository.find(query);
         const mappedSymbols = MapSymbolEntitiesToSymbols(result);
 

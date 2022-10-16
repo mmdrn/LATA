@@ -41,10 +41,10 @@ export default class SymbolService implements ISymbolService {
         }
     }
 
-    findAllSymbols(quoteAsset: string): Promise<Symbol[]> {
+    findAllSymbols(quoteAsset: string, status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"): Promise<Symbol[]> {
         switch (this.exchange) {
             case Exchanges.Binance:
-                return this.binanceSymbolService.findAllSymbols(quoteAsset);
+                return this.binanceSymbolService.findAllSymbols(quoteAsset, status);
             case Exchanges.KuCoin:
                 throw new Error("method not implemented.");
         }

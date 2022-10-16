@@ -3,8 +3,6 @@ import { Exchanges } from "../../BLL/Enums/Exchanges.enum";
 import { EnumHelper } from "../../BLL/Helpers/EnumHelper.helper";
 import { APIResponse } from "../Models/APIResponse.model";
 import SymbolService from "../../BLL/Services/Symbol.service";
-import ExistSymbol from "src/BLL/Models/ExistSymbol.model";
-import Symbol from "src/BLL/Models/Symbol.model";
 
 @Controller("symbols")
 export class SymbolsController {
@@ -39,6 +37,8 @@ export class SymbolsController {
 
         this.symbolService.setExchange(exchange);
         const symbols = await this.symbolService.fetchAllSymbolsFromRemote();
+
+
 
         // technical debt: must avoid to insert duplicate symbols.
         // technical debt: must avoid to insert duplicate symbols.
@@ -83,7 +83,11 @@ export class SymbolsController {
     }
 
     @Get("get-all-symbols")
-    async getAllSymbols(@Query("exchange") _exchange: string, @Query("quoteAsset") quoteAsset: string): Promise<APIResponse> {
+    async getAllSymbols(
+        @Query("exchange") _exchange: string,
+        @Query("quoteAsset") quoteAsset: string,
+        @Query("quoteAsset") status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"
+    ): Promise<APIResponse> {
         let exchange: number = null;
         {
             try {
@@ -116,7 +120,7 @@ export class SymbolsController {
             }
         }
 
-        const symbols = await this.symbolService.findAllSymbols(quoteAsset);
+        const symbols = await this.symbolService.findAllSymbols(quoteAsset, status);
 
         return {
             success: true,
