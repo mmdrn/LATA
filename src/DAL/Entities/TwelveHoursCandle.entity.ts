@@ -1,5 +1,4 @@
 import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
-import Candle from "./Classes/Candle";
 
 @Entity()
 export default class TwelveHoursCandle {
