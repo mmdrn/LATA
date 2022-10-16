@@ -12,7 +12,21 @@ export class CandleTasksService {
     constructor(
         private readonly symbolService: SymbolService,
         private readonly candleService: CandleService,
-        // @InjectQueue("fetch-candles-queue") private readonly fetchCandlesQueue: Queue
+        @InjectQueue("OneMinuteCandle") private readonly oneMinuteCandleQueue: Queue,
+        @InjectQueue("ThreeMinutesCandle") private readonly threeMinutesCandleQueue: Queue,
+        @InjectQueue("FiveMinutesCandle") private readonly fiveMinutesCandleQueue: Queue,
+        @InjectQueue("FifteenMinutesCandle") private readonly fifteenMinutesCandleQueue: Queue,
+        @InjectQueue("ThirtyMinutesCandle") private readonly thirtyMinutesCandleQueue: Queue,
+        @InjectQueue("OneHourCandle") private readonly oneHourCandleQueue: Queue,
+        @InjectQueue("TwoHoursCandle") private readonly twoHoursCandleQueue: Queue,
+        @InjectQueue("FourHoursCandle") private readonly fourHoursCandleQueue: Queue,
+        @InjectQueue("SixHoursCandle") private readonly sixHoursCandleQueue: Queue,
+        @InjectQueue("EightHoursCandle") private readonly eightHoursCandleQueue: Queue,
+        @InjectQueue("TwelveHoursCandle") private readonly twelveHoursCandleQueue: Queue,
+        @InjectQueue("OneDayCandle") private readonly oneDayCandleQueue: Queue,
+        @InjectQueue("ThreeDaysCandle") private readonly threeDaysCandleQueue: Queue,
+        @InjectQueue("OneWeekCandle") private readonly oneWeekCandleQueue: Queue,
+        @InjectQueue("OneMonthCandle") private readonly oneMonthCandleQueue: Queue,
     ) { }
 
     private readonly logger = new Logger(CandleTasksService.name);
@@ -24,10 +38,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.OneMinute.toString(), {
+    //         this.oneMinuteCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -40,10 +54,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.ThreeMinutes.toString(), {
+    //         this.threeMinutesCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -56,10 +70,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.FiveMinutes.toString(), {
+    //         this.fiveMinutesCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -72,10 +86,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.FifteenMinutes.toString(), {
+    //         this.fifteenMinutesCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -88,10 +102,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.ThirtyMinutes.toString(), {
+    //         this.thirtyMinutesCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -104,10 +118,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.OneHour.toString(), {
+    //         this.oneHourCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -120,30 +134,30 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.TwoHour.toString(), {
+    //         this.twoHoursCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
     // }
 
-    // @Cron('0 01 */4 * * *', {
-    //     timeZone: "UTC"
-    // })
-    // async fetchFourHourCandles() {
-    //     this.symbolService.setExchange(Exchanges.Binance);
-    //     this.candleService.setExchange(Exchanges.Binance);
+    @Cron('0 01 */4 * * *', {
+        timeZone: "UTC"
+    })
+    async fetchFourHourCandles() {
+        this.symbolService.setExchange(Exchanges.Binance);
+        this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+        const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
-    //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.FourHour.toString(), {
-    //             symbol: symbol,
-    //         })
-    //     }
-    // }
+        for (const symbol of symbols) {
+            this.fourHoursCandleQueue.add("default_queue", {
+                symbol: symbol,
+            })
+        }
+    }
 
     // @Cron('0 01 */6 * * *', {
     //     timeZone: "UTC"
@@ -152,10 +166,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.SixHour.toString(), {
+    //         this.sixHoursCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -168,10 +182,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.EightHour.toString(), {
+    //         this.eightHoursCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -184,10 +198,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.TwelveHour.toString(), {
+    //         this.twelveHoursCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -200,10 +214,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.OneDay.toString(), {
+    //         this.oneDayCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -216,10 +230,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.ThreeDay.toString(), {
+    //         this.threeDaysCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -232,10 +246,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.OneWeek.toString(), {
+    //         this.oneWeekCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }
@@ -248,10 +262,10 @@ export class CandleTasksService {
     //     this.symbolService.setExchange(Exchanges.Binance);
     //     this.candleService.setExchange(Exchanges.Binance);
 
-    //     const symbols = await this.symbolService.findAllSymbols(undefined);
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
     //     for (const symbol of symbols) {
-    //         this.fetchCandlesQueue.add(Interval.OneMonth.toString(), {
+    //         this.oneMonthCandleQueue.add("default_queue", {
     //             symbol: symbol,
     //         })
     //     }

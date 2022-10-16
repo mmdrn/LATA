@@ -25,7 +25,7 @@ export class FourHoursCandleProcessor {
 
     @Process({
         name: "default_queue",
-        concurrency: 3
+        concurrency: 5
     })
     async jobProcessor(job: Job) {
         this.logger.log(`processing a FourHour job. jobId: ${job.id}`)

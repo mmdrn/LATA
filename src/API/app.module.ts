@@ -19,7 +19,6 @@ import OneHourCandle from './../DAL/Entities/OneHourCandle.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CandleTasksService } from './Tasks/Candle.task';
 import { BullModule } from '@nestjs/bull';
-// import { FetchCandlesProcessor } from './Processors/Candle.processor';
 import OneMinuteCandle from './../DAL/Entities/OneMinuteCandle.entity';
 import ThreeMinutesCandle from './../DAL/Entities/ThreeMinutesCandle.entity';
 import FiveMinutesCandle from './../DAL/Entities/FiveMinutesCandle.entity';
@@ -35,7 +34,6 @@ import ThreeDaysCandle from './../DAL/Entities/ThreeDaysCandle.entity';
 import OneWeekCandle from './../DAL/Entities/OneWeekCandle.entity';
 import OneMonthCandle from './../DAL/Entities/OneMonthCandle.entity';
 import { LittleShitController } from './Controllers/LittleShit.controller';
-// import { BullMonitorModule } from './Bull/bull-monitor.module';
 import { BullMonitorService } from './Bull/bull-monitor.service';
 import { OneMonthCandleProcessor } from './Processors/OneMonthCandle.processor';
 import { EightHoursCandleProcessor } from './Processors/EightHoursCandle.processor';
@@ -86,11 +84,6 @@ import { TwoHoursCandleProcessor } from './Processors/TwoHoursCandle.processor';
     ]),
 
     BullModule.forRoot({
-      // limiter: {
-      //   max: 1,
-      //   duration: 1000,
-      //   bounceBack: false,
-      // },
       redis: {
         host: 'localhost',
         port: 6379,
