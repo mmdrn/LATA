@@ -6,9 +6,9 @@ import { Interval } from './../../BLL/Enums/Interval.enum';
 import CandleService from './../../BLL/Services/Candle.service';
 import SymbolService from './../../BLL/Services/Symbol.service';
 
-@Processor('SixHoursCandle')
+@Processor('SixHoursCandle_Fetches')
 @Injectable()
-export class SixHoursCandleProcessor {
+export class SixHoursCandle_FetchesProcessor {
     constructor(
         private readonly symbolService: SymbolService,
         private readonly candleService: CandleService,
@@ -17,7 +17,7 @@ export class SixHoursCandleProcessor {
         this.candleService.setExchange(Exchanges.Binance);
     }
 
-    private readonly logger = new Logger(SixHoursCandleProcessor.name);
+    private readonly logger = new Logger(SixHoursCandle_FetchesProcessor.name);
 
     @Process({
         name: "default_queue",
@@ -28,5 +28,19 @@ export class SixHoursCandleProcessor {
         const symbol = job.data.symbol;
         const _interval: Interval = Interval.SixHour;
         return await this.candleService.fetchAndStore(symbol, _interval)
+    }
+}
+
+@Processor('SixHoursCandle_Calculations')
+@Injectable()
+export class SixHoursCandle_CalculationsProcessor {
+    private readonly logger = new Logger(SixHoursCandle_CalculationsProcessor.name);
+
+    @Process({
+        name: "default_queue",
+        concurrency: 3
+    })
+    async jobProcessor(job: Job) {
+        this.logger.log(`${job.id}`)
     }
 }

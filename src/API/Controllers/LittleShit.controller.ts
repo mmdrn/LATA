@@ -10,7 +10,7 @@ export class LittleShitController {
     constructor(
         private readonly symbolService: SymbolService,
         private readonly candleService: CandleService,
-        @InjectQueue("FourHoursCandle") private readonly fourHoursCandleQueue: Queue
+        @InjectQueue("FourHoursCandle_Fetches") private readonly fourHoursCandle_FetchesQueue: Queue
     ) { }
 
     @Post("shit")
@@ -19,31 +19,31 @@ export class LittleShitController {
         this.candleService.setExchange(Exchanges.Binance);
 
         const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
-        await this.fourHoursCandleQueue.pause();
-        await this.fourHoursCandleQueue.empty();
+        await this.fourHoursCandle_FetchesQueue.pause();
+        await this.fourHoursCandle_FetchesQueue.empty();
         for (const symbol of symbols) {
-            await this.fourHoursCandleQueue.add("default_queue", {
+            await this.fourHoursCandle_FetchesQueue.add("default_queue", {
                 symbol: symbol,
             })
         }
-        await this.fourHoursCandleQueue.resume();
+        await this.fourHoursCandle_FetchesQueue.resume();
     }
 
     @Post("clearqueue")
     async ClearQueue(): Promise<any> {
-        const result = await this.fourHoursCandleQueue.empty()
+        const result = await this.fourHoursCandle_FetchesQueue.empty()
         return result
     }
 
     @Post("pausequeue")
     async PauseQueue(): Promise<any> {
-        const result = await this.fourHoursCandleQueue.pause()
+        const result = await this.fourHoursCandle_FetchesQueue.pause()
         return result
     }
 
     @Post("startqueue")
     async StartQueue(): Promise<any> {
-        const result = await this.fourHoursCandleQueue.resume()
+        const result = await this.fourHoursCandle_FetchesQueue.resume()
         return result
     }
 }
