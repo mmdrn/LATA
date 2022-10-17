@@ -17,6 +17,14 @@ export default class Binance_CandleService implements ICandleService {
 
     private readonly logger = new Logger(Binance_CandleService.name);
 
+    async getCandles(symbol: string, interval: Interval, take: number, sortBy: keyof Candle = "closeTime", sortMethod: "ASC" | "DESC"): Promise<Candle[]> {
+        return await this.candlesRepository.getCandles(symbol, interval, take, sortBy, sortMethod);
+    }
+
+    async getPreviousCandle(symbol: string, interval: Interval, closeTime: number): Promise<Candle> {
+        return await this.candlesRepository.getPreviousCandle(symbol, interval, closeTime);
+    }
+
     async fetchAndStore(symbol: Symbol, interval: Interval): Promise<Candle[]> {
         this.logger.log(`fetching candles. symbol: ${symbol.symbol}, interval: ${interval}`);
         let addedCandleCount: number = 0;

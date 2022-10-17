@@ -6,4 +6,8 @@ export default interface ICandleDBRepository {
     storeCandle(candles: CreateCandle[], interval: Interval): Promise<Candle[]>;
 
     getLatestCandleCloseTime(symbol: string, interval: Interval): Promise<number>;
+
+    getPreviousCandle(symbol: string, interval: Interval, closeTime: number): Promise<Candle>
+
+    getCandles(symbol: string, interval: Interval, take: number, sortBy: keyof Candle, sortMethod: string): Promise<Candle[]>
 }

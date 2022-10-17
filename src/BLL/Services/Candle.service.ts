@@ -16,6 +16,24 @@ export default class CandleService implements ICandleService {
         private readonly binanceCandleService: Binance_CandleService,
     ) { }
 
+    async getCandles(symbol: string, interval: Interval, take: number, sortBy: keyof Candle = "closeTime", sortMethod: "ASC" | "DESC"): Promise<Candle[]> {
+        switch (this.exchange) {
+            case Exchanges.Binance:
+                return this.binanceCandleService.getCandles(symbol, interval, take, sortBy, sortMethod);
+            case Exchanges.KuCoin:
+                throw new Error("method not implemented.");
+        }
+    }
+
+    async getPreviousCandle(symbol: string, interval: Interval, closeTime: number): Promise<Candle> {
+        switch (this.exchange) {
+            case Exchanges.Binance:
+                return this.binanceCandleService.getPreviousCandle(symbol, interval, closeTime);
+            case Exchanges.KuCoin:
+                throw new Error("method not implemented.");
+        }
+    }
+
     async fetchAndStore(symbol: Symbol, interval: Interval): Promise<Candle[]> {
         switch (this.exchange) {
             case Exchanges.Binance:

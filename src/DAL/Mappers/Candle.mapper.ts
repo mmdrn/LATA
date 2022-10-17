@@ -1,3 +1,4 @@
+import Candle from "src/BLL/Models/Candle.model";
 import { Interval } from "../../BLL/Enums/Interval.enum";
 import CreateCandle from "../../BLL/Models/CreateCandle.model";
 import EightHoursCandle from "../Entities/EightHoursCandle.entity";
@@ -357,27 +358,62 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
     return mappedCandles;
 }
 
-// export function MapSymbolEntitiesToSymbols(candles: Candle[]) {
-//     const mappedCandles: Candle[] = [];
+export function MapCandleEntityToCandle(candle:
+    OneMinuteCandle |
+    ThreeMinutesCandle |
+    FiveMinutesCandle |
+    FifteenMinutesCandle |
+    ThirtyMinutesCandle |
+    OneHourCandle |
+    TwoHoursCandle |
+    FourHoursCandle |
+    SixHoursCandle |
+    EightHoursCandle |
+    TwelveHoursCandle |
+    OneDayCandle |
+    ThreeDaysCandle |
+    OneWeekCandle |
+    OneMonthCandle): Candle {
 
-//     for (const candle of candles) {
-//         mappedCandles.push({
-//             id: candle.id,
-//             closePrice: candle.closePrice,
-//             closeTime: candle.closeTime,
-//             highPrice: candle.highPrice,
-//             lowPrice: candle.lowPrice,
-//             numberOfTrades: candle.numberOfTrades,
-//             openPrice: candle.openPrice,
-//             openTime: candle.openPrice,
-//             quoteAssetVolume: candle.quoteAssetVolume,
-//             symbol: candle.symbol,
-//             takerBuyBaseAssetVolume: candle.takerBuyBaseAssetVolume,
-//             takerBuyQuoteAssetVolume: candle.takerBuyQuoteAssetVolume,
-//             usedField: candle.usedField,
-//             volume: candle.volume
-//         })
-//     }
+    return {
+        id: candle.id.toString(),
+        closePrice: candle.closePrice,
+        closeTime: candle.closeTime,
+        highPrice: candle.highPrice,
+        lowPrice: candle.lowPrice,
+        numberOfTrades: candle.numberOfTrades,
+        openPrice: candle.openPrice,
+        openTime: candle.openPrice,
+        quoteAssetVolume: candle.quoteAssetVolume,
+        symbol: candle.symbol,
+        takerBuyBaseAssetVolume: candle.takerBuyBaseAssetVolume,
+        takerBuyQuoteAssetVolume: candle.takerBuyQuoteAssetVolume,
+        usedField: candle.usedField,
+        volume: candle.volume
+    }
+}
 
-//     return mappedCandles;
-// }
+export function MapCandleEntitiesToCandles(candles:
+    OneMinuteCandle[] |
+    ThreeMinutesCandle[] |
+    FiveMinutesCandle[] |
+    FifteenMinutesCandle[] |
+    ThirtyMinutesCandle[] |
+    OneHourCandle[] |
+    TwoHoursCandle[] |
+    FourHoursCandle[] |
+    SixHoursCandle[] |
+    EightHoursCandle[] |
+    TwelveHoursCandle[] |
+    OneDayCandle[] |
+    ThreeDaysCandle[] |
+    OneWeekCandle[] |
+    OneMonthCandle[]): Candle[] {
+    const mappedCandles: Candle[] = []
+
+    for (const candle of candles) {
+        mappedCandles.push(MapCandleEntityToCandle(candle));
+    }
+
+    return mappedCandles;
+}
