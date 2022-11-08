@@ -10,9 +10,9 @@ export default interface ICandleService {
 
     storeCandles(candles: CreateCandle[], interval: Interval): Promise<Candle[]>
 
-    fetchAndStore(symbol: Symbol, interval: Interval): Promise<Candle[] | null>
+    fetchAndStore(symbol: Symbol, interval: Interval): Promise<Candle[]>
 
-    getPreviousCandle(symbol: string, interval: Interval, closeTime: number): Promise<Candle>
+    getPreviousCandle(symbol: string, interval: Interval, closeTime: number): Promise<Candle | null>
 
-    getCandles(symbol: string, interval: Interval, take: number, sortBy: keyof Candle, sortMethod: "ASC" | "DESC"): Promise<Candle[]>
+    getCandles(symbol: string, interval: Interval, take: number, sortBy: keyof Candle, sortMethod: "ASC" | "DESC"): Promise<Candle[] | null>
 }

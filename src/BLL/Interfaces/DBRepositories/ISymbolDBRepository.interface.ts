@@ -8,4 +8,6 @@ export default interface ISymbolDBRepository {
     insertSymbols(symbols: CreateSymbol[]): Promise<Symbol[]>;
 
     existSymbols(query: ExistSymbol[]): Promise<ExistSymbol[]>;
+
+    getSymbolBySymbol(symbol: string): Promise<Symbol | null>;
 }

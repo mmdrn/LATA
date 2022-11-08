@@ -44,3 +44,17 @@ export class ThreeMinutesCandle_CalculationsProcessor {
         this.logger.log(`${job.id}`)
     }
 }
+
+@Processor('ThreeMinutesCandle_Preprocessings')
+@Injectable()
+export class ThreeMinutesCandle_PreprocessingsProcessor {
+    private readonly logger = new Logger(ThreeMinutesCandle_PreprocessingsProcessor.name);
+
+    @Process({
+        name: "default_queue",
+        concurrency: 3
+    })
+    async jobProcessor(job: Job) {
+        this.logger.log(`${job.id}`)
+    }
+}

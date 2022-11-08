@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Equal, FindOptionsSelect, FindOptionsWhere, Repository } from "typeorm";
 import { MapCreateSymbolsToSymbolEntities, MapSymbolEntitiesToSymbols } from "../Mappers/Symbol.mapper";
 import ISymbolDBRepository from "src/BLL/Interfaces/DBRepositories/ISymbolDBRepository.interface";
 import CreateSymbol from "src/BLL/Models/CreateSymbol.model";
@@ -15,44 +15,66 @@ export default class SymbolDBRepository implements ISymbolDBRepository {
         private symbolsRepository: Repository<SymbolEntity>
     ) { }
 
-    async existSymbols(query: ExistSymbol[]): Promise<ExistSymbol[]> {
-        const whereArray = [];
+    async getSymbolBySymbol(symbol: string): Promise<Symbol | null> {
+        const _symbol = await this.symbolsRepository.findOne({
+            where: {
+                symbol: symbol
+            }
+        })
 
+        if (!_symbol) return null
+        
+        return MapSymbolEntitiesToSymbols([_symbol])[0];
+    }
+
+    async existSymbols(query: ExistSymbol[]): Promise<ExistSymbol[]> {
+        const whereArray: FindOptionsWhere<SymbolEntity>[] = [];
         for (const item of query) {
-            const obj = {};
-            obj[item.field] = item.value;
-            whereArray.push(obj)
+            const queryItem: FindOptionsWhere<SymbolEntity> = {}
+            queryItem[item.field].toString = Equal(item.value.toString());
+            queryItem[item.field].toString = item.value;
+            whereArray.push(queryItem)
         }
 
-        const findResult = await this.symbolsRepository.find({
-            where: whereArray,
-            select: {
-                id: true,
-                symbol: true,
-                quoteAsset: false,
-                baseAsset: false
-            },
-        });
+        try {
+            const findResult = await this.symbolsRepository.find({
+                // where: whereArray,
+                where: [
+                    {
+                        symbol: Equal("BNBBTC")
+                    },
+                    {
+                        symbol: Equal("ETHBTC")
+                    },
+                ]
+            });
 
-        const result: ExistSymbol[] = query.map(i => {
-            const newItem = i;
+            const result: ExistSymbol[] = query.map(i => {
+                const newItem = i;
 
-            if (findResult.map(s => s[i.field]).includes(i.value)) {
-                newItem.exist = true;
-            } else {
-                newItem.exist = false;
-            }
+                if (findResult.map(s => s[i.field]).includes(i.value)) {
+                    newItem.exist = true;
+                } else {
+                    newItem.exist = false;
+                }
 
-            return newItem;
-        });
+                return newItem;
+            });
 
-        return result;
+            return result;
+        } catch (error) {
+            throw error
+        }
     }
 
     async findAllSymbols(quoteAsset: string, status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"): Promise<Symbol[]> {
         const query: object = {};
-        if (quoteAsset) query["where"] = { quoteAsset }
-        if (status) query["where"] = { status }
+        if (quoteAsset || status) {
+            query["where"] = {};
+            if (quoteAsset) query["where"]["quoteAsset"] = quoteAsset;
+            if (status) query["where"]["status"] = status;
+        }
+
         const result = await this.symbolsRepository.find(query);
         const mappedSymbols = MapSymbolEntitiesToSymbols(result);
 

@@ -1,5 +1,7 @@
-import CreateCandleMeta from "src/BLL/Models/CreateCandleMeta.model";
+import CandleMeta from "src/BLL/Models/CandleMeta.model";
 
 export default interface ICandleMetaDBRepository {
-    addCandleMetas(metas: CreateCandleMeta[])
+    getCandleMetaByCandleId(id: string): Promise<CandleMeta | null>;
+
+    storeOrUpdate(candleMetas: CandleMeta[]): Promise<CandleMeta[]>;
 }

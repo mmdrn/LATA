@@ -153,7 +153,7 @@ export class CandleTasksService {
         const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
         for (const symbol of symbols) {
-            this.fourHoursCandleQueue.add("default_queue", {
+            await this.fourHoursCandleQueue.add("default_queue", {
                 symbol: symbol,
             })
         }

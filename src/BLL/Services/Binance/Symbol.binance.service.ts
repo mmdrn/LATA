@@ -13,6 +13,10 @@ export default class Binance_SymbolService implements ISymbolService {
         private readonly binanceExchangeAPIRepository: Binance_ExchangeAPIRepository
     ) { }
 
+    async getSymbolBySymbol(symbol: string): Promise<Symbol | null> {
+        return this.symbolsRepository.getSymbolBySymbol(symbol);
+    }
+
     async fetchAllSymbolsFromRemote(): Promise<Symbol[]> {
         return this.binanceExchangeAPIRepository.fetchAllSymbols();
     }

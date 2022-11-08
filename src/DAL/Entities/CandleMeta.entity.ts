@@ -8,8 +8,17 @@ export default class CandleMeta {
     id: ObjectID;
 
     @Column()
-    rsi: number;
+    candleId: string;
 
     @Column()
     difference: number;
+
+    @Column()
+    rsi14: number;
+
+    @Column()
+    previous14Gains: number;
+
+    @Column()
+    previous14Losses: number;
 }

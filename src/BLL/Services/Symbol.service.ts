@@ -8,43 +8,35 @@ import Binance_SymbolService from "./Binance/Symbol.binance.service";
 
 @Injectable()
 export default class SymbolService implements ISymbolService {
-
     private exchange: number = null;
     constructor(
         private readonly binanceSymbolService: Binance_SymbolService,
     ) { }
 
-    existSymbols(query: ExistSymbol[]): Promise<ExistSymbol[]> {
-        switch (this.exchange) {
-            case Exchanges.Binance:
-                return this.binanceSymbolService.existSymbols(query);
-            case Exchanges.KuCoin:
-                throw new Error("method not implemented.");
-        }
+    async getSymbolBySymbol(symbol: string): Promise<Symbol | null> {
+        return this._getInstance().getSymbolBySymbol(symbol);
     }
 
-    insertSymbols(symbols: Symbol[]): Promise<Symbol[]> {
-        switch (this.exchange) {
-            case Exchanges.Binance:
-                return this.binanceSymbolService.insertSymbols(symbols);
-            case Exchanges.KuCoin:
-                throw new Error("method not implemented.");
-        }
+    async existSymbols(query: ExistSymbol[]): Promise<ExistSymbol[]> {
+        return this._getInstance().existSymbols(query);
+    }
+
+    async insertSymbols(symbols: Symbol[]): Promise<Symbol[]> {
+        return this._getInstance().insertSymbols(symbols);
     }
 
     async fetchAllSymbolsFromRemote(): Promise<Symbol[]> {
-        switch (this.exchange) {
-            case Exchanges.Binance:
-                return this.binanceSymbolService.fetchAllSymbolsFromRemote();
-            case Exchanges.KuCoin:
-                throw new Error("method not implemented.");
-        }
+        return this._getInstance().fetchAllSymbolsFromRemote();
     }
 
-    findAllSymbols(quoteAsset: string, status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"): Promise<Symbol[]> {
+    async findAllSymbols(quoteAsset: string, status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"): Promise<Symbol[]> {
+        return this._getInstance().findAllSymbols(quoteAsset, status);
+    }
+
+    private _getInstance(): ISymbolService {
         switch (this.exchange) {
             case Exchanges.Binance:
-                return this.binanceSymbolService.findAllSymbols(quoteAsset, status);
+                return this.binanceSymbolService;
             case Exchanges.KuCoin:
                 throw new Error("method not implemented.");
         }

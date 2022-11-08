@@ -1,6 +1,7 @@
+import Symbol from "./Symbol.model";
+
 export default class ExistSymbol {
     exist: Boolean;
-    field: string;
+    field: keyof Symbol;
     value: string | number;
-    operator: string
 }

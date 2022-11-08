@@ -1,8 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { MapCandlesToCreateCandles } from "src/BLL/Mappers/Candle.mapper";
-import Candle from "src/BLL/Models/Candle.model";
-import CreateCandle from "src/BLL/Models/CreateCandle.model";
-import Symbol from "src/BLL/Models/Symbol.model";
+import { MapCandlesToCreateCandles } from "../../../BLL/Mappers/Candle.mapper";
+import Candle from "../../../BLL/Models/Candle.model";
+import CreateCandle from "../../../BLL/Models/CreateCandle.model";
+import Symbol from "../../../BLL/Models/Symbol.model";
 import Binance_ExchangeAPIRepository from "../../../BLL/APIRepositories/Binance/ExchangeAPI.binance.repository";
 import { Interval } from "../../../BLL/Enums/Interval.enum";
 import CandleDBRepository from "../../../DAL/Repositories/CandleDB.repository";
@@ -17,12 +17,12 @@ export default class Binance_CandleService implements ICandleService {
 
     private readonly logger = new Logger(Binance_CandleService.name);
 
-    async getCandles(symbol: string, interval: Interval, take: number, sortBy: keyof Candle = "closeTime", sortMethod: "ASC" | "DESC"): Promise<Candle[]> {
-        return await this.candlesRepository.getCandles(symbol, interval, take, sortBy, sortMethod);
+    async getCandles(symbol: string, interval: Interval, take: number, sortBy: keyof Candle = "closeTime", sortMethod: "ASC" | "DESC"): Promise<Candle[] | null> {
+        return this.candlesRepository.getCandles(symbol, interval, take, sortBy, sortMethod);
     }
 
-    async getPreviousCandle(symbol: string, interval: Interval, closeTime: number): Promise<Candle> {
-        return await this.candlesRepository.getPreviousCandle(symbol, interval, closeTime);
+    async getPreviousCandle(symbol: string, interval: Interval, closeTime: number): Promise<Candle | null> {
+        return this.candlesRepository.getPreviousCandle(symbol, interval, closeTime);
     }
 
     async fetchAndStore(symbol: Symbol, interval: Interval): Promise<Candle[]> {
@@ -68,6 +68,9 @@ export default class Binance_CandleService implements ICandleService {
     async calculateStartTimeDependingOnTheLatestExistingCandle(symbol: string, interval: Interval): Promise<number> {
         let startTime: number = new Date(2000, 1, 1).getTime();
         const _startTime = await this.candlesRepository.getLatestCandleCloseTime(symbol, interval);
+
+        if (!_startTime) return startTime;
+        
         startTime = _startTime ? _startTime : startTime;
 
         return startTime;

@@ -35,21 +35,26 @@ import OneWeekCandle from './../DAL/Entities/OneWeekCandle.entity';
 import OneMonthCandle from './../DAL/Entities/OneMonthCandle.entity';
 import { LittleShitController } from './Controllers/LittleShit.controller';
 import { BullMonitorService } from './Bull/bull-monitor.service';
-import { OneMinuteCandle_CalculationsProcessor, OneMinuteCandle_FetchesProcessor } from './Processors/OneMinuteCandle.processor';
-import { ThreeMinutesCandle_CalculationsProcessor, ThreeMinutesCandle_FetchesProcessor } from './Processors/ThreeMinutesCandle.processor';
-import { FiveMinutesCandle_CalculationsProcessor, FiveMinutesCandle_FetchesProcessor } from './Processors/FiveMinutesCandle.processor';
-import { FifteenMinutesCandle_CalculationsProcessor, FifteenMinutesCandle_FetchesProcessor } from './Processors/FifteenMinutesCandle.processor';
-import { ThirtyMinutesCandle_CalculationsProcessor, ThirtyMinutesCandle_FetchesProcessor } from './Processors/ThirtyMinutesCandle.processor';
-import { OneHourCandle_CalculationsProcessor, OneHourCandle_FetchesProcessor } from './Processors/OneHourCandle.processor';
-import { TwoHoursCandle_CalculationsProcessor, TwoHoursCandle_FetchesProcessor } from './Processors/TwoHoursCandle.processor';
-import { FourHoursCandle_CalculationsProcessor, FourHoursCandle_FetchesProcessor } from './Processors/FourHoursCandle.processor';
-import { SixHoursCandle_CalculationsProcessor, SixHoursCandle_FetchesProcessor } from './Processors/SixHoursCandle.processor';
-import { EightHoursCandle_CalculationsProcessor, EightHoursCandle_FetchesProcessor } from './Processors/EightHoursCandle.processor';
-import { TwelveHoursCandle_CalculationsProcessor, TwelveHoursCandle_FetchesProcessor } from './Processors/TwelveHoursCandle.processor';
-import { OneDayCandle_CalculationsProcessor, OneDayCandle_FetchesProcessor } from './Processors/OneDayCandle.processor';
-import { ThreeDaysCandle_CalculationsProcessor, ThreeDaysCandle_FetchesProcessor } from './Processors/ThreeDayCandle.processor';
-import { OneWeekCandle_CalculationsProcessor, OneWeekCandle_FetchesProcessor } from './Processors/OneWeekCandle.processor';
-import { OneMonthCandle_CalculationsProcessor, OneMonthCandle_FetchesProcessor } from './Processors/OneMonthCandle.processor';
+import { OneMinuteCandle_CalculationsProcessor, OneMinuteCandle_FetchesProcessor, OneMinuteCandle_PreprocessingsProcessor } from './Processors/OneMinuteCandle.processor';
+import { ThreeMinutesCandle_CalculationsProcessor, ThreeMinutesCandle_FetchesProcessor, ThreeMinutesCandle_PreprocessingsProcessor } from './Processors/ThreeMinutesCandle.processor';
+import { FiveMinutesCandle_CalculationsProcessor, FiveMinutesCandle_FetchesProcessor, FiveMinutesCandle_PreprocessingsProcessor } from './Processors/FiveMinutesCandle.processor';
+import { FifteenMinutesCandle_CalculationsProcessor, FifteenMinutesCandle_FetchesProcessor, FifteenMinutesCandle_PreprocessingsProcessor } from './Processors/FifteenMinutesCandle.processor';
+import { ThirtyMinutesCandle_CalculationsProcessor, ThirtyMinutesCandle_FetchesProcessor, ThirtyMinutesCandle_PreprocessingsProcessor } from './Processors/ThirtyMinutesCandle.processor';
+import { OneHourCandle_CalculationsProcessor, OneHourCandle_FetchesProcessor, OneHourCandle_PreprocessingsProcessor } from './Processors/OneHourCandle.processor';
+import { TwoHoursCandle_CalculationsProcessor, TwoHoursCandle_FetchesProcessor, TwoHoursCandle_PreprocessingsProcessor } from './Processors/TwoHoursCandle.processor';
+import { FourHoursCandle_CalculationsProcessor, FourHoursCandle_FetchesProcessor, FourHoursCandle_PreprocessingsProcessor } from './Processors/FourHoursCandle.processor';
+import { SixHoursCandle_CalculationsProcessor, SixHoursCandle_FetchesProcessor, SixHoursCandle_PreprocessingsProcessor } from './Processors/SixHoursCandle.processor';
+import { EightHoursCandle_CalculationsProcessor, EightHoursCandle_FetchesProcessor, EightHoursCandle_PreprocessingsProcessor } from './Processors/EightHoursCandle.processor';
+import { TwelveHoursCandle_CalculationsProcessor, TwelveHoursCandle_FetchesProcessor, TwelveHoursCandle_PreprocessingsProcessor } from './Processors/TwelveHoursCandle.processor';
+import { OneDayCandle_CalculationsProcessor, OneDayCandle_FetchesProcessor, OneDayCandle_PreprocessingsProcessor } from './Processors/OneDayCandle.processor';
+import { ThreeDaysCandle_CalculationsProcessor, ThreeDaysCandle_FetchesProcessor, ThreeDaysCandle_PreprocessingsProcessor } from './Processors/ThreeDayCandle.processor';
+import { OneWeekCandle_CalculationsProcessor, OneWeekCandle_FetchesProcessor, OneWeekCandle_PreprocessingsProcessor } from './Processors/OneWeekCandle.processor';
+import { OneMonthCandle_CalculationsProcessor, OneMonthCandle_FetchesProcessor, OneMonthCandle_PreprocessingsProcessor } from './Processors/OneMonthCandle.processor';
+import SymbolMetaService from '../BLL/Services/SymbolMeta.service';
+import Binance_SymbolMetaService from '../BLL/Services/Binance/SymbolMeta.binance.service';
+import SymbolMetaDBRepository from '../DAL/Repositories/SymbolMetaDB.repository';
+import SymbolMeta from '../DAL/Entities/SymbolMeta.entity';
+import CandleMeta from '../DAL/Entities/CandleMeta.entity';
 
 
 @Module({
@@ -66,6 +71,8 @@ import { OneMonthCandle_CalculationsProcessor, OneMonthCandle_FetchesProcessor }
     }),
     TypeOrmModule.forFeature([
       Symbol,
+      SymbolMeta,
+      CandleMeta,
       OneMinuteCandle,
       ThreeMinutesCandle,
       FiveMinutesCandle,
@@ -80,7 +87,7 @@ import { OneMonthCandle_CalculationsProcessor, OneMonthCandle_FetchesProcessor }
       OneDayCandle,
       ThreeDaysCandle,
       OneWeekCandle,
-      OneMonthCandle
+      OneMonthCandle,
     ]),
 
     BullModule.forRoot({
@@ -121,6 +128,22 @@ import { OneMonthCandle_CalculationsProcessor, OneMonthCandle_FetchesProcessor }
     BullModule.registerQueue({ name: 'OneWeekCandle_Calculations' }),
     BullModule.registerQueue({ name: 'OneMonthCandle_Calculations' }),
 
+    BullModule.registerQueue({ name: 'OneMinuteCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'ThreeMinutesCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'FiveMinutesCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'FifteenMinutesCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'ThirtyMinutesCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'OneHourCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'TwoHoursCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'FourHoursCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'SixHoursCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'EightHoursCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'TwelveHoursCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'OneDayCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'ThreeDaysCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'OneWeekCandle_Preprocessings' }),
+    BullModule.registerQueue({ name: 'OneMonthCandle_Preprocessings' }),
+
     ScheduleModule.forRoot()
   ],
   controllers: [
@@ -131,18 +154,21 @@ import { OneMonthCandle_CalculationsProcessor, OneMonthCandle_FetchesProcessor }
   providers: [
     // strategy services
     SymbolService,
+    SymbolMetaService,
     CandleService,
     CandleMetaService,
 
     // binance services
     Binance_SymbolService,
+    Binance_SymbolMetaService,
     Binance_CandleService,
     Binance_CandleMetaService,
 
     // db repositories
     SymbolDBRepository,
-    CandleMetaDBRepository,
+    SymbolMetaDBRepository,
     CandleDBRepository,
+    CandleMetaDBRepository,
 
     // strategy api repositories
     ExchangeAPIRepository,
@@ -183,6 +209,22 @@ import { OneMonthCandle_CalculationsProcessor, OneMonthCandle_FetchesProcessor }
     ThreeDaysCandle_CalculationsProcessor,
     OneWeekCandle_CalculationsProcessor,
     OneMonthCandle_CalculationsProcessor,
+
+    OneMinuteCandle_PreprocessingsProcessor,
+    ThreeMinutesCandle_PreprocessingsProcessor,
+    FiveMinutesCandle_PreprocessingsProcessor,
+    FifteenMinutesCandle_PreprocessingsProcessor,
+    ThirtyMinutesCandle_PreprocessingsProcessor,
+    OneHourCandle_PreprocessingsProcessor,
+    TwoHoursCandle_PreprocessingsProcessor,
+    FourHoursCandle_PreprocessingsProcessor,
+    SixHoursCandle_PreprocessingsProcessor,
+    EightHoursCandle_PreprocessingsProcessor,
+    TwelveHoursCandle_PreprocessingsProcessor,
+    OneDayCandle_PreprocessingsProcessor,
+    ThreeDaysCandle_PreprocessingsProcessor,
+    OneWeekCandle_PreprocessingsProcessor,
+    OneMonthCandle_PreprocessingsProcessor,
 
     // other
     BullMonitorService
