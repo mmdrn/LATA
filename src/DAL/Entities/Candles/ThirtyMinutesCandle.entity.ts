@@ -1,5 +1,5 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
+import { Entity } from "typeorm";
 import BaseCandle from "./BaseCandle";
 
 @Entity()
-export default class ThirtyMinutesCandle extends BaseCandle {}
+export default class ThirtyMinutesCandle extends BaseCandle { }

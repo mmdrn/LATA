@@ -1,4 +1,4 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
+import { Entity, } from "typeorm";
 import BaseCandle from "./BaseCandle";
 
 @Entity()
