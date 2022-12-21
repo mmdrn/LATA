@@ -5,4 +5,11 @@ export default class CandleMeta {
     rsi14: number;
     previous14Gains: number;
     previous14Losses: number;
+    isImpulse: boolean;
+    isCorrection: boolean;
+    symbol: string;
+    openPrice: number;
+    openTime: number;
+    closePrice: number;
+    closeTime: number;
 }

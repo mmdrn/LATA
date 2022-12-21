@@ -45,4 +45,7 @@ export default class EightHoursCandle {
 
     @Column()
     usedField: number;
+
+    @Column()
+    direction: "asc" | "desc";
 }

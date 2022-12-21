@@ -45,4 +45,7 @@ export default class ThreeMinutesCandle {
 
     @Column()
     usedField: number;
+
+    @Column()
+    direction: "asc" | "desc";
 }

@@ -13,6 +13,9 @@ export default class CandleMetaService implements ICandleMetaService {
     constructor(
         private readonly binanceCandleMetaService: Binance_CandleMetaService,
     ) { }
+    async getCorrections(symbol: string, closeTime: number): Promise<CandleMetaModel[]> {
+        return this._getInstance().getCorrections(symbol, closeTime)
+    }
 
     async storeOrUpdate(candleMetas: CandleMetaModel[]): Promise<CandleMetaModel[]> {
         return this._getInstance().storeOrUpdate(candleMetas)

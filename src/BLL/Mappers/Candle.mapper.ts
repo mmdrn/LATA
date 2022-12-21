@@ -19,6 +19,8 @@ export function MapCandlesToCreateCandles(candles: Candle[]): CreateCandle[] {
         _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
         _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
         _candle.usedField = candle.usedField;
+        _candle.direction = candle.direction;
+
 
         mappedCandles.push(_candle)
     }

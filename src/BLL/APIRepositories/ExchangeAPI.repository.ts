@@ -13,11 +13,11 @@ export default class ExchangeAPIRepository implements IExchangeAPIRepository {
     constructor(
         private readonly binanceExchangeAPIRepository: Binance_ExchangeAPIRepository
     ) { }
-    
-    async fetchCandles(symbol: string, interval: Interval, startTime: number, limit: number): Promise<Candle[]> {
+
+    async fetchCandles(symbol: string, interval: Interval, startTime: number, limit: number, ignoreCurrentCandle: Boolean = true): Promise<Candle[]> {
         switch (this.exchange) {
             case Exchanges.Binance:
-                return this.binanceExchangeAPIRepository.fetchCandles(symbol, interval, startTime, limit);
+                return this.binanceExchangeAPIRepository.fetchCandles(symbol, interval, startTime, limit, ignoreCurrentCandle);
             case Exchanges.KuCoin:
                 throw new Error("method not implemented.");
         }

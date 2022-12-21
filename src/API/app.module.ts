@@ -55,6 +55,7 @@ import Binance_SymbolMetaService from '../BLL/Services/Binance/SymbolMeta.binanc
 import SymbolMetaDBRepository from '../DAL/Repositories/SymbolMetaDB.repository';
 import SymbolMeta from '../DAL/Entities/SymbolMeta.entity';
 import CandleMeta from '../DAL/Entities/CandleMeta.entity';
+import { StrategiesController } from './Controllers/Strategies.controller';
 
 
 @Module({
@@ -149,6 +150,7 @@ import CandleMeta from '../DAL/Entities/CandleMeta.entity';
   controllers: [
     AppController,
     SymbolsController,
+    StrategiesController,
     LittleShitController
   ],
   providers: [

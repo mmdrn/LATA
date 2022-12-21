@@ -12,4 +12,5 @@ export default class CreateCandle {
     takerBuyBaseAssetVolume: number;
     takerBuyQuoteAssetVolume: number;
     usedField: number;
+    direction: "asc" | "desc";
 }

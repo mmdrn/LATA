@@ -45,4 +45,7 @@ export default class OneWeekCandle {
 
     @Column()
     usedField: number;
+
+    @Column()
+    direction: "asc" | "desc";
 }

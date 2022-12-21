@@ -24,6 +24,7 @@ export class SymbolsController {
         @InjectQueue("EightHoursCandle_Preprocessings") private readonly eightHoursCandlePreprocessingsQueue: Queue,
         @InjectQueue("TwelveHoursCandle_Preprocessings") private readonly twelveHoursCandlePreprocessingsQueue: Queue,
         @InjectQueue("OneDayCandle_Preprocessings") private readonly oneDayCandlePreprocessingsQueue: Queue,
+        @InjectQueue("OneDayCandle_Fetches") private readonly oneDayCandleFetchQueue: Queue,
         @InjectQueue("ThreeDaysCandle_Preprocessings") private readonly threeDaysCandlePreprocessingsQueue: Queue,
         @InjectQueue("OneWeekCandle_Preprocessings") private readonly oneWeekCandlePreprocessingsQueue: Queue,
         @InjectQueue("OneMonthCandle_Preprocessings") private readonly oneMonthCandlePreprocessingsQueue: Queue,
@@ -223,6 +224,14 @@ export class SymbolsController {
             case Interval.FourHour: {
                 for (const symbol of symbols) {
                     await this.fourHoursCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.OneDay: {
+                for (const symbol of symbols) {
+                    await this.oneDayCandleFetchQueue.add("default_queue", {
                         symbol: symbol,
                     })
                 }

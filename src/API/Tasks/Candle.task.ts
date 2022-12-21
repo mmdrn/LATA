@@ -143,21 +143,21 @@ export class CandleTasksService {
     //     }
     // }
 
-    @Cron('0 01 */4 * * *', {
-        timeZone: "UTC"
-    })
-    async fetchFourHourCandles() {
-        this.symbolService.setExchange(Exchanges.Binance);
-        this.candleService.setExchange(Exchanges.Binance);
+    // @Cron('0 01 */4 * * *', {
+    //     timeZone: "UTC"
+    // })
+    // async fetchFourHourCandles() {
+    //     this.symbolService.setExchange(Exchanges.Binance);
+    //     this.candleService.setExchange(Exchanges.Binance);
 
-        const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
+    //     const symbols = await this.symbolService.findAllSymbols(undefined, "TRADING");
 
-        for (const symbol of symbols) {
-            await this.fourHoursCandleQueue.add("default_queue", {
-                symbol: symbol,
-            })
-        }
-    }
+    //     for (const symbol of symbols) {
+    //         await this.fourHoursCandleQueue.add("default_queue", {
+    //             symbol: symbol,
+    //         })
+    //     }
+    // }
 
     // @Cron('0 01 */6 * * *', {
     //     timeZone: "UTC"

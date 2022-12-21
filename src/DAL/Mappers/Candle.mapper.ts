@@ -53,6 +53,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -75,6 +76,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -96,6 +98,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -117,6 +120,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -138,6 +142,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -159,6 +164,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -180,6 +186,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -201,6 +208,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -222,6 +230,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -243,6 +252,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -264,6 +274,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -285,6 +296,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -306,6 +318,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -327,6 +340,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -348,6 +362,7 @@ export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interv
                 _candle.takerBuyBaseAssetVolume = candle.takerBuyBaseAssetVolume;
                 _candle.takerBuyQuoteAssetVolume = candle.takerBuyQuoteAssetVolume;
                 _candle.usedField = candle.usedField;
+                _candle.direction = candle.direction;
 
                 mappedCandles.push(_candle)
             }
@@ -383,13 +398,14 @@ export function MapCandleEntityToCandle(candle:
         lowPrice: candle.lowPrice,
         numberOfTrades: candle.numberOfTrades,
         openPrice: candle.openPrice,
-        openTime: candle.openPrice,
+        openTime: candle.openTime,
         quoteAssetVolume: candle.quoteAssetVolume,
         symbol: candle.symbol,
         takerBuyBaseAssetVolume: candle.takerBuyBaseAssetVolume,
         takerBuyQuoteAssetVolume: candle.takerBuyQuoteAssetVolume,
         usedField: candle.usedField,
-        volume: candle.volume
+        volume: candle.volume,
+        direction: candle.direction
     }
 }
 

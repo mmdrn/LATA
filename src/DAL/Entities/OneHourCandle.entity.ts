@@ -45,4 +45,7 @@ export default class OneHourCandle {
 
     @Column()
     usedField: number;
+
+    @Column()
+    direction: "asc" | "desc";
 }

@@ -9,7 +9,7 @@ import Candle from "../../../BLL/Models/Candle.model";
 @Injectable()
 export default class Binance_ExchangeAPIRepository implements IExchangeAPIRepository {
 
-    async fetchCandles(symbol: string, interval: Interval, startTime: number, limit: number): Promise<Candle[]> {
+    async fetchCandles(symbol: string, interval: Interval, startTime: number, limit: number, ignoreCurrentCandle: Boolean = true): Promise<Candle[]> {
         const clinet = new MainClient({});
         const result = await clinet.getKlines({
             symbol: symbol.toUpperCase(),
@@ -19,6 +19,11 @@ export default class Binance_ExchangeAPIRepository implements IExchangeAPIReposi
         });
 
         const mappedCandles = this.mapBinanceKlinesToCandles(result, symbol);
+
+        if (ignoreCurrentCandle) {
+            const now = Date.now();
+            return mappedCandles.filter(i => i.closeTime < now)
+        }
 
         return mappedCandles;
     }
@@ -90,6 +95,7 @@ export default class Binance_ExchangeAPIRepository implements IExchangeAPIReposi
                 takerBuyBaseAssetVolume: candle[9],
                 takerBuyQuoteAssetVolume: candle[10],
                 usedField: candle[11],
+                direction: candle[1] > candle[4] ? "desc" : "asc"
             });
         }
 

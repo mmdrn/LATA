@@ -21,4 +21,25 @@ export default class CandleMeta {
 
     @Column()
     previous14Losses: number;
+
+    @Column()
+    isImpulse: boolean;
+
+    @Column()
+    isCorrection: boolean;
+
+    @Column()
+    openPrice: number;
+
+    @Column()
+    openTime: number;
+
+    @Column()
+    closePrice: number;
+
+    @Column()
+    closeTime: number;
+
+    @Column()
+    symbol: string;
 }

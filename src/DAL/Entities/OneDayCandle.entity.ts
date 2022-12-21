@@ -45,4 +45,7 @@ export default class OneDayCandle {
 
     @Column()
     usedField: number;
+
+    @Column()
+    direction: "asc" | "desc";
 }

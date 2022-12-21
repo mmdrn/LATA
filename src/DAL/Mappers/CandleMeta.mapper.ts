@@ -36,7 +36,14 @@ export function MapCandleMetaEntitiesToCandleMetas(candleMetas: CandleMetaEntity
             difference: candleMeta.difference,
             rsi14: candleMeta.rsi14,
             previous14Gains: candleMeta.previous14Gains,
-            previous14Losses: candleMeta.previous14Losses
+            previous14Losses: candleMeta.previous14Losses,
+            isImpulse: candleMeta.isImpulse,
+            isCorrection: candleMeta.isCorrection,
+            openPrice: candleMeta.openPrice,
+            openTime: candleMeta.openTime,
+            closePrice: candleMeta.closePrice,
+            closeTime: candleMeta.closeTime,
+            symbol: candleMeta.symbol
         })
     }
 
