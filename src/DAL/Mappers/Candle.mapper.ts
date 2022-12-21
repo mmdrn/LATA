@@ -1,22 +1,22 @@
 import Candle from "src/BLL/Models/Candle.model";
 import { Interval } from "../../BLL/Enums/Interval.enum";
 import CreateCandle from "../../BLL/Models/CreateCandle.model";
-import EightHoursCandle from "../Entities/EightHoursCandle.entity";
-import FifteenMinutesCandle from "../Entities/FifteenMinutesCandle.entity";
-import FiveMinutesCandle from "../Entities/FiveMinutesCandle.entity";
-import FourHoursCandle from "../Entities/FourHoursCandle.entity";
-import OneDayCandle from "../Entities/OneDayCandle.entity";
-import OneHourCandle from "../Entities/OneHourCandle.entity";
+import EightHoursCandle from "../Entities/Candles/EightHoursCandle.entity";
+import FifteenMinutesCandle from "../Entities/Candles/FifteenMinutesCandle.entity";
+import FiveMinutesCandle from "../Entities/Candles/FiveMinutesCandle.entity";
+import FourHoursCandle from "../Entities/Candles/FourHoursCandle.entity";
+import OneDayCandle from "../Entities/Candles/OneDayCandle.entity";
+import OneHourCandle from "../Entities/Candles/OneHourCandle.entity";
 // import Candle from "../Entities/OneHourCandle.entity";
-import OneMinuteCandle from "../Entities/OneMinuteCandle.entity";
-import OneMonthCandle from "../Entities/OneMonthCandle.entity";
-import OneWeekCandle from "../Entities/OneWeekCandle.entity";
-import SixHoursCandle from "../Entities/SixHoursCandle.entity";
-import ThirtyMinutesCandle from "../Entities/ThirtyMinutesCandle.entity";
-import ThreeDaysCandle from "../Entities/ThreeDaysCandle.entity";
-import ThreeMinutesCandle from "../Entities/ThreeMinutesCandle.entity";
-import TwelveHoursCandle from "../Entities/TwelveHoursCandle.entity";
-import TwoHoursCandle from "../Entities/TwoHoursCandle.entity";
+import OneMinuteCandle from "../Entities/Candles/OneMinuteCandle.entity";
+import OneMonthCandle from "../Entities/Candles/OneMonthCandle.entity";
+import OneWeekCandle from "../Entities/Candles/OneWeekCandle.entity";
+import SixHoursCandle from "../Entities/Candles/SixHoursCandle.entity";
+import ThirtyMinutesCandle from "../Entities/Candles/ThirtyMinutesCandle.entity";
+import ThreeDaysCandle from "../Entities/Candles/ThreeDaysCandle.entity";
+import ThreeMinutesCandle from "../Entities/Candles/ThreeMinutesCandle.entity";
+import TwelveHoursCandle from "../Entities/Candles/TwelveHoursCandle.entity";
+import TwoHoursCandle from "../Entities/Candles/TwoHoursCandle.entity";
 
 export function MapCreateCandlesToCandleEntities(candles: CreateCandle[], interval: Interval):
     OneMinuteCandle[] |
