@@ -20,7 +20,6 @@ import ThreeDaysCandle from '../DAL/Entities/Candles/ThreeDaysCandle.entity';
 import OneWeekCandle from '../DAL/Entities/Candles/OneWeekCandle.entity';
 import OneMonthCandle from '../DAL/Entities/Candles/OneMonthCandle.entity';
 
-import CandleMeta from '../DAL/Entities/CandleMeta.entity';
 import OneMinuteCandleMeta from '../DAL/Entities/CandleMetas/OneMinuteCandleMeta.entity';
 import ThreeMinutesCandleMeta from '../DAL/Entities/CandleMetas/ThreeMinutesCandleMeta.entity';
 import FiveMinutesCandleMeta from '../DAL/Entities/CandleMetas/FiveMinutesCandleMeta.entity';
@@ -41,7 +40,6 @@ const TypeORMImports = [
     Symbol,
     SymbolMeta,
 
-    CandleMeta,
     OneMinuteCandle,
     ThreeMinutesCandle,
     FiveMinutesCandle,

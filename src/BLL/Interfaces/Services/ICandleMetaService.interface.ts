@@ -6,9 +6,9 @@ import Candle from "../../Models/Candle.model";
 export default interface ICandleMetaService {
     calculateDifference(candle: Candle, interval: Interval): Promise<number | null>;
 
-    getCandleMetaByCandleId(id: string): Promise<CandleMeta | null>;
+    getCandleMetaByCandleId(id: string, interval: Interval): Promise<CandleMeta | null>;
 
-    storeOrUpdate(candleMetas: CandleMeta[]): Promise<CandleMeta[]>;
+    storeOrUpdate(candleMetas: CandleMeta[], interval: Interval): Promise<CandleMeta[]>;
 
-    getCorrections(symbol: string, closeTime: number): Promise<CandleMetaModel[]>;
+    getCorrections(symbol: string, closeTime: number, interval: Interval): Promise<CandleMetaModel[]>;
 }

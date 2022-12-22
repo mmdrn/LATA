@@ -13,16 +13,16 @@ export default class CandleMetaService implements ICandleMetaService {
     constructor(
         private readonly binanceCandleMetaService: Binance_CandleMetaService,
     ) { }
-    async getCorrections(symbol: string, closeTime: number): Promise<CandleMetaModel[]> {
-        return this._getInstance().getCorrections(symbol, closeTime)
+    async getCorrections(symbol: string, closeTime: number, interval: Interval): Promise<CandleMetaModel[]> {
+        return this._getInstance().getCorrections(symbol, closeTime, interval)
     }
 
-    async storeOrUpdate(candleMetas: CandleMetaModel[]): Promise<CandleMetaModel[]> {
-        return this._getInstance().storeOrUpdate(candleMetas)
+    async storeOrUpdate(candleMetas: CandleMetaModel[], interval: Interval): Promise<CandleMetaModel[]> {
+        return this._getInstance().storeOrUpdate(candleMetas, interval)
     }
 
-    async getCandleMetaByCandleId(id: string): Promise<CandleMetaModel | null> {
-        return this._getInstance().getCandleMetaByCandleId(id);
+    async getCandleMetaByCandleId(id: string, interval: Interval): Promise<CandleMetaModel | null> {
+        return this._getInstance().getCandleMetaByCandleId(id, interval);
     }
 
     async calculateDifference(candle: CandleModel, interval: Interval): Promise<number | null> {

@@ -39,7 +39,6 @@ export class BullMonitorService extends BullMonitorExpress {
     @InjectQueue('OneWeekCandle_Calculations') OneWeekCandleQueue_Calculations: Queue,
     @InjectQueue('OneMonthCandle_Calculations') OneMonthCandleQueue_Calculations: Queue,
 
-
     @InjectQueue('OneMinuteCandle_Preprocessings') OneMinuteCandleQueue_Preprocessings: Queue,
     @InjectQueue('ThreeMinutesCandle_Preprocessings') ThreeMinutesCandleQueue_Preprocessings: Queue,
     @InjectQueue('FiveMinutesCandle_Preprocessings') FiveMinutesCandleQueue_Preprocessings: Queue,
