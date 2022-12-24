@@ -88,7 +88,7 @@ export class StrategiesController {
 
                 const promises: Promise<CandleMeta[]>[] = [];
                 for (const symbol of symbols) {
-                    promises.push(this.candleMetaService.getCorrections(symbol.symbol, closeTime.getTime()));
+                    promises.push(this.candleMetaService.getCorrections(symbol.symbol, closeTime.getTime(), interval));
                 }
 
                 await Promise.all(promises).then(values => {
@@ -111,7 +111,7 @@ export class StrategiesController {
 
                 const promises: Promise<CandleMeta[]>[] = [];
                 for (const symbol of symbols) {
-                    promises.push(this.candleMetaService.getCorrections(symbol.symbol, closeTime.getTime()));
+                    promises.push(this.candleMetaService.getCorrections(symbol.symbol, closeTime.getTime(), interval));
                 }
 
                 await Promise.all(promises).then(values => {

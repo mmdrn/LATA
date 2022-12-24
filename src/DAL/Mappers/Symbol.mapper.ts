@@ -1,5 +1,5 @@
-import CreateSymbol from "src/BLL/Models/CreateSymbol.model";
-import Symbol from "src/BLL/Models/Symbol.model";
+import CreateSymbol from "../../BLL/Models/CreateSymbol.model";
+import Symbol from "../../BLL/Models/Symbol.model";
 import SymbolEntity from "../Entities/Symbol.entity";
 
 export function MapCreateSymbolsToSymbolEntities(symbols: CreateSymbol[]): SymbolEntity[] {

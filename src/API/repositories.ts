@@ -1,9 +1,9 @@
-import Binance_ExchangeAPIRepository from "src/BLL/APIRepositories/Binance/ExchangeAPI.binance.repository";
-import ExchangeAPIRepository from "src/BLL/APIRepositories/ExchangeAPI.repository";
-import CandleDBRepository from "src/DAL/Repositories/CandleDB.repository";
-import CandleMetaDBRepository from "src/DAL/Repositories/CandleMetaDB.repository";
-import SymbolDBRepository from "src/DAL/Repositories/SymbolDB.repository";
-import SymbolMetaDBRepository from "src/DAL/Repositories/SymbolMetaDB.repository";
+import Binance_ExchangeAPIRepository from "../BLL/APIRepositories/Binance/ExchangeAPI.binance.repository";
+import ExchangeAPIRepository from "../BLL/APIRepositories/ExchangeAPI.repository";
+import CandleDBRepository from "../DAL/Repositories/CandleDB.repository";
+import CandleMetaDBRepository from "../DAL/Repositories/CandleMetaDB.repository";
+import SymbolDBRepository from "../DAL/Repositories/SymbolDB.repository";
+import SymbolMetaDBRepository from "../DAL/Repositories/SymbolMetaDB.repository";
 
 export default [
     // db repositories

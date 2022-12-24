@@ -1,4 +1,4 @@
-import SymbolMeta from "src/BLL/Models/SymbolMeta.model";
+import SymbolMeta from "../../BLL/Models/SymbolMeta.model";
 import SymbolMetaEntity from "../Entities/SymbolMeta.entity";
 
 // export function MapCreateSymbolsToSymbolEntities(symbols: CreateSymbol[]): SymbolEntity[] {

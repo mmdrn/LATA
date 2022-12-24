@@ -88,7 +88,7 @@ export class OneDayCandle_CalculationsProcessor {
             symbolMeta.symbolId = symbol.id;
         }
 
-        let candleMeta: CandleMeta = await this.candleMetaService.getCandleMetaByCandleId(candle.id);
+        let candleMeta: CandleMeta = await this.candleMetaService.getCandleMetaByCandleId(candle.id, interval);
         if (!candleMeta) {
             candleMeta = new CandleMeta();
             candleMeta.candleId = candle.id;
@@ -121,7 +121,7 @@ export class OneDayCandle_CalculationsProcessor {
                     await job.log(message);
                     return false
                 } else {
-                    candleMeta = await this.candleMetaService.getCandleMetaByCandleId(candle.id);
+                    candleMeta = await this.candleMetaService.getCandleMetaByCandleId(candle.id, interval);
                 }
             }
 
@@ -130,7 +130,7 @@ export class OneDayCandle_CalculationsProcessor {
                 if (!(candleMeta.rsi14 || candleMeta.rsi14 === 0)) {
                     const previousCandle = await this.candleService.getPreviousCandle(candle.symbol, interval, candle.closeTime);
                     if (previousCandle) {
-                        const previousCandleMeta = await this.candleMetaService.getCandleMetaByCandleId(previousCandle.id.toString());
+                        const previousCandleMeta = await this.candleMetaService.getCandleMetaByCandleId(previousCandle.id.toString(), interval);
                         if (previousCandleMeta) {
                             let gains = 0;
                             let losses = 0;
@@ -186,7 +186,7 @@ export class OneDayCandle_CalculationsProcessor {
                         candlePercentage = parseFloat(((candle.openPrice - candle.closePrice) / candle.openPrice * 100).toFixed(2));
                     }
 
-                    const previousCandleMeta = await this.candleMetaService.getCandleMetaByCandleId(previousCandle.id.toString());
+                    const previousCandleMeta = await this.candleMetaService.getCandleMetaByCandleId(previousCandle.id.toString(), interval);
                     if (previousCandleMeta) {
                         // candle percentage according to the prev candle.
                         const _percentage = candlePercentage / prevCandlePercentage * 100;
@@ -200,7 +200,7 @@ export class OneDayCandle_CalculationsProcessor {
                             previousCandleMeta.isImpulse = false;
                             candleMeta.isCorrection = false;
                         }
-                        await this.candleMetaService.storeOrUpdate([previousCandleMeta]);
+                        await this.candleMetaService.storeOrUpdate([previousCandleMeta], interval);
                     }
                     else {
                         const message = `no previews candle meta found. candleId: ${candle.id}, interval: ${interval}, symbol: ${candle.symbol}`;
@@ -211,7 +211,7 @@ export class OneDayCandle_CalculationsProcessor {
             }
         }
 
-        await this.candleMetaService.storeOrUpdate([candleMeta]);
+        await this.candleMetaService.storeOrUpdate([candleMeta], interval);
     }
 
     private async calculateRSI14Prerequisites(symbol: Symbol, candle: Candle, interval: Interval, symbolMeta: SymbolMeta) {
@@ -228,7 +228,7 @@ export class OneDayCandle_CalculationsProcessor {
             let losses: number = 0;
             const candleMetas: CandleMeta[] = [];
             for await (const candle of candles) {
-                let candleMeta: CandleMeta = await this.candleMetaService.getCandleMetaByCandleId(candle.id);
+                let candleMeta: CandleMeta = await this.candleMetaService.getCandleMetaByCandleId(candle.id, interval);
                 if (!candleMeta) {
                     candleMeta = new CandleMeta()
                     candleMeta.candleId = candle.id;
@@ -256,20 +256,20 @@ export class OneDayCandle_CalculationsProcessor {
                 candleMetas.push(candleMeta);
             }
 
-            await this.candleMetaService.storeOrUpdate(candleMetas);
+            await this.candleMetaService.storeOrUpdate(candleMetas, interval);
 
             gains = gains != 0 ? gains / 14 : gains;
             losses = losses != 0 ? losses / 14 : losses;
             const dividedGainsAndLosses: number = gains == 0 || losses == 0 ? 0 : gains / losses;
             const rsi14 = 100 - 100 / (1 + dividedGainsAndLosses);
 
-            const the14thCandleMeta: CandleMeta = await this.candleMetaService.getCandleMetaByCandleId(candles[13].id);
+            const the14thCandleMeta: CandleMeta = await this.candleMetaService.getCandleMetaByCandleId(candles[13].id, interval);
             if (!the14thCandleMeta) return null;
 
             the14thCandleMeta.previous14Gains = gains;
             the14thCandleMeta.previous14Losses = losses;
             the14thCandleMeta.rsi14 = rsi14;
-            await this.candleMetaService.storeOrUpdate([the14thCandleMeta]);
+            await this.candleMetaService.storeOrUpdate([the14thCandleMeta], interval);
 
             symbolMeta.rsi14PrerequisitesCalculated = true;
             await this.symbolMetaService.storeOrUpdate([symbolMeta]);

@@ -1,6 +1,6 @@
-import { Interval } from "src/BLL/Enums/Interval.enum";
-import CandleMeta from "src/BLL/Models/CandleMeta.model";
-import CreateCandleMeta from "src/BLL/Models/CreateCandleMeta.model";
+import { Interval } from "../../BLL/Enums/Interval.enum";
+import CandleMeta from "../../BLL/Models/CandleMeta.model";
+import CreateCandleMeta from "../../BLL/Models/CreateCandleMeta.model";
 import { ObjectID } from "typeorm";
 import EightHoursCandleMeta from "../Entities/CandleMetas/EightHoursCandleMeta.entity";
 import FifteenMinutesCandleMeta from "../Entities/CandleMetas/FifteenMinutesCandleMeta.entity";

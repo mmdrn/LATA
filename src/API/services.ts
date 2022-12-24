@@ -1,11 +1,11 @@
-import Binance_CandleService from "src/BLL/Services/Binance/Candle.binance.service";
-import Binance_CandleMetaService from "src/BLL/Services/Binance/CandleMetas.binance.service";
-import Binance_SymbolService from "src/BLL/Services/Binance/Symbol.binance.service";
-import Binance_SymbolMetaService from "src/BLL/Services/Binance/SymbolMeta.binance.service";
-import CandleService from "src/BLL/Services/Candle.service";
-import CandleMetaService from "src/BLL/Services/CandleMeta.service";
-import SymbolService from "src/BLL/Services/Symbol.service";
-import SymbolMetaService from "src/BLL/Services/SymbolMeta.service";
+import Binance_CandleService from "../BLL/Services/Binance/Candle.binance.service";
+import Binance_CandleMetaService from "../BLL/Services/Binance/CandleMetas.binance.service";
+import Binance_SymbolService from "../BLL/Services/Binance/Symbol.binance.service";
+import Binance_SymbolMetaService from "../BLL/Services/Binance/SymbolMeta.binance.service";
+import CandleService from "../BLL/Services/Candle.service";
+import CandleMetaService from "../BLL/Services/CandleMeta.service";
+import SymbolService from "../BLL/Services/Symbol.service";
+import SymbolMetaService from "../BLL/Services/SymbolMeta.service";
 
 export default [
     // strategy services

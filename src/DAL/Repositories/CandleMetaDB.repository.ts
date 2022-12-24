@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Interval } from "src/BLL/Enums/Interval.enum";
-import ICandleMetaDBRepository from "src/BLL/Interfaces/DBRepositories/ICandleMetaDBRepository.interface";
-import CandleMetaModel from "src/BLL/Models/CandleMeta.model";
+import { Interval } from "../../BLL/Enums/Interval.enum";
+import ICandleMetaDBRepository from "../../BLL/Interfaces/DBRepositories/ICandleMetaDBRepository.interface";
+import CandleMetaModel from "../../BLL/Models/CandleMeta.model";
 import { MongoRepository } from "typeorm";
 import { MongoFindManyOptions } from "typeorm/find-options/mongodb/MongoFindManyOptions";
 import { MongoFindOneOptions } from "typeorm/find-options/mongodb/MongoFindOneOptions";
