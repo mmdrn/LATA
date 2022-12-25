@@ -113,7 +113,7 @@ export class OneDayCandle_CalculationsProcessor {
 
         if (Number.isFinite(candleMeta.difference)) {
             // rsi14 prerequisites
-            if (!symbolMeta.rsi14PrerequisitesCalculated) {
+            if (!symbolMeta.t1dRsi14PrerequisitesCalculated) {
                 const result = await this.calculateRSI14Prerequisites(symbol, candle, interval, symbolMeta);
                 if (!result) {
                     const message = `can't calculate RSI14 prerequisites. candleId: ${candle.id}, interval: ${interval}, symbol: ${candle.symbol}`;
@@ -126,7 +126,7 @@ export class OneDayCandle_CalculationsProcessor {
             }
 
             // rsi14
-            if (symbolMeta.rsi14PrerequisitesCalculated) {
+            if (symbolMeta.t1dRsi14PrerequisitesCalculated) {
                 if (!(candleMeta.rsi14 || candleMeta.rsi14 === 0)) {
                     const previousCandle = await this.candleService.getPreviousCandle(candle.symbol, interval, candle.closeTime);
                     if (previousCandle) {
@@ -271,7 +271,7 @@ export class OneDayCandle_CalculationsProcessor {
             the14thCandleMeta.rsi14 = rsi14;
             await this.candleMetaService.storeOrUpdate([the14thCandleMeta], interval);
 
-            symbolMeta.rsi14PrerequisitesCalculated = true;
+            symbolMeta.t1dRsi14PrerequisitesCalculated = true;
             await this.symbolMetaService.storeOrUpdate([symbolMeta]);
 
             return true;

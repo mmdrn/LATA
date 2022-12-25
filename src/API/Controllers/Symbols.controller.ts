@@ -31,7 +31,7 @@ export class SymbolsController {
     ) { }
 
     @Get("update-list")
-    async updateSymbolsList(@Query("exchange") _exchange: string, @Query("quoteAsset") quoteAsset: string): Promise<APIResponse> {
+    async updateSymbolsList(@Query("exchange") _exchange: string): Promise<APIResponse> {
         let exchange: number = null;
         {
             try {
@@ -245,71 +245,71 @@ export class SymbolsController {
         }
     }
 
-    @Get("preprocessings")
-    async preprocessings(
-        @Query("exchange") _exchange: string,
-        @Query("quoteAsset") quoteAsset: string,
-        @Query("status") status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"
-    ): Promise<APIResponse> {
-        let exchange: number = null;
-        {
-            try {
-                exchange = parseInt(_exchange);
-                const enumHelper = new EnumHelper();
-                if (!enumHelper.hasValue(exchange, Exchanges)) {
-                    return {
-                        success: false,
-                        message: "this is an invalid exchange!!",
-                        data: {
-                            exchange
-                        }
-                    }
-                }
-            } catch (error) {
-                return {
-                    success: false,
-                    message: "this is an invalid exchange!!",
-                    data: {
-                        exchange
-                    }
-                }
-            }
-        }
+    // @Get("preprocessings")
+    // async preprocessings(
+    //     @Query("exchange") _exchange: string,
+    //     @Query("quoteAsset") quoteAsset: string,
+    //     @Query("status") status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"
+    // ): Promise<APIResponse> {
+    //     let exchange: number = null;
+    //     {
+    //         try {
+    //             exchange = parseInt(_exchange);
+    //             const enumHelper = new EnumHelper();
+    //             if (!enumHelper.hasValue(exchange, Exchanges)) {
+    //                 return {
+    //                     success: false,
+    //                     message: "this is an invalid exchange!!",
+    //                     data: {
+    //                         exchange
+    //                     }
+    //                 }
+    //             }
+    //         } catch (error) {
+    //             return {
+    //                 success: false,
+    //                 message: "this is an invalid exchange!!",
+    //                 data: {
+    //                     exchange
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        if (!this.symbolService.setExchange(exchange)) {
-            return {
-                success: false,
-                message: "internal server error.",
-            }
-        }
+    //     if (!this.symbolService.setExchange(exchange)) {
+    //         return {
+    //             success: false,
+    //             message: "internal server error.",
+    //         }
+    //     }
 
-        const symbols = await this.symbolService.findAllSymbols(quoteAsset, status);
+    //     const symbols = await this.symbolService.findAllSymbols(quoteAsset, status);
 
-        for (const symbol of [symbols[0]]) {
-            const promises = []
+    //     for (const symbol of [symbols[0]]) {
+    //         const promises = []
 
-            promises.push(this.oneMinuteCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.threeMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.fiveMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.fifteenMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.thirtyMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.oneHourCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.twoHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.fourHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.sixHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.eightHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.twelveHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.oneDayCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.threeDaysCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.oneWeekCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-            promises.push(this.oneMonthCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.oneMinuteCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.threeMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.fiveMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.fifteenMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.thirtyMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.oneHourCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.twoHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.fourHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.sixHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.eightHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.twelveHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.oneDayCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.threeDaysCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.oneWeekCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
+    //         promises.push(this.oneMonthCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
 
-            await Promise.all(promises);
-        }
+    //         await Promise.all(promises);
+    //     }
 
-        return {
-            message: "",
-            success: true
-        }
-    }
+    //     return {
+    //         message: "",
+    //         success: true
+    //     }
+    // }
 }

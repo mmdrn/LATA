@@ -84,7 +84,7 @@ export class StrategiesController {
         switch (interval) {
             case Interval.FourHour: {
                 const closeTime = new Date();
-                closeTime.setDate(closeTime.getDate() - 30);
+                closeTime.setDate(closeTime.getDate() - 80);
 
                 const promises: Promise<CandleMeta[]>[] = [];
                 for (const symbol of symbols) {

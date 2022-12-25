@@ -113,55 +113,55 @@ export class FourHoursCandle_CalculationsProcessor {
 
         if (Number.isFinite(candleMeta.difference)) {
             // rsi14 prerequisites
-            // if (!symbolMeta.rsi14PrerequisitesCalculated) {
-            //     const result = await this.calculateRSI14Prerequisites(symbol, candle, interval, symbolMeta);
-            //     if (!result) {
-            //         const message = `can't calculate RSI14 prerequisites. candleId: ${candle.id}, interval: ${interval}, symbol: ${candle.symbol}`;
-            //         this.logger.error(message);
-            //         await job.log(message);
-            //         return false
-            //     } else {
-            //         candleMeta = await this.candleMetaService.getCandleMetaByCandleId(candle.id);
-            //     }
-            // }
+            if (!symbolMeta.t4hRsi14PrerequisitesCalculated) {
+                const result = await this.calculateRSI14Prerequisites(symbol, candle, interval, symbolMeta);
+                if (!result) {
+                    const message = `can't calculate RSI14 prerequisites. candleId: ${candle.id}, interval: ${interval}, symbol: ${candle.symbol}`;
+                    this.logger.error(message);
+                    await job.log(message);
+                    return false
+                } else {
+                    candleMeta = await this.candleMetaService.getCandleMetaByCandleId(candle.id, interval);
+                }
+            }
 
             // rsi14
-            // if (symbolMeta.rsi14PrerequisitesCalculated) {
-            //     if (!(candleMeta.rsi14 || candleMeta.rsi14 === 0)) {
-            //         const previousCandle = await this.candleService.getPreviousCandle(candle.symbol, interval, candle.closeTime);
-            //         if (previousCandle) {
-            //             const previousCandleMeta = await this.candleMetaService.getCandleMetaByCandleId(previousCandle.id.toString());
-            //             if (previousCandleMeta) {
-            //                 let gains = 0;
-            //                 let losses = 0;
-            //                 let dividedGainsAndLosses = 0;
-            //                 let rsi14 = 0;
+            if (symbolMeta.t4hRsi14PrerequisitesCalculated) {
+                if (!(candleMeta.rsi14 || candleMeta.rsi14 === 0)) {
+                    const previousCandle = await this.candleService.getPreviousCandle(candle.symbol, interval, candle.closeTime);
+                    if (previousCandle) {
+                        const previousCandleMeta = await this.candleMetaService.getCandleMetaByCandleId(previousCandle.id.toString(), interval);
+                        if (previousCandleMeta) {
+                            let gains = 0;
+                            let losses = 0;
+                            let dividedGainsAndLosses = 0;
+                            let rsi14 = 0;
 
-            //                 // is gain
-            //                 if (candleMeta.difference > 0) {
-            //                     gains = (previousCandleMeta.previous14Gains * 13 + candleMeta.difference) / 14;
-            //                     losses = (previousCandleMeta.previous14Losses * 13 + 0) / 14;
-            //                 }
-            //                 // is loss
-            //                 else if (candleMeta.difference < 0) {
-            //                     gains = (previousCandleMeta.previous14Gains * 13 + 0) / 14;
-            //                     losses = (previousCandleMeta.previous14Losses * 13 + candleMeta.difference * -1) / 14;
-            //                 }
+                            // is gain
+                            if (candleMeta.difference > 0) {
+                                gains = (previousCandleMeta.previous14Gains * 13 + candleMeta.difference) / 14;
+                                losses = (previousCandleMeta.previous14Losses * 13 + 0) / 14;
+                            }
+                            // is loss
+                            else if (candleMeta.difference < 0) {
+                                gains = (previousCandleMeta.previous14Gains * 13 + 0) / 14;
+                                losses = (previousCandleMeta.previous14Losses * 13 + candleMeta.difference * -1) / 14;
+                            }
 
-            //                 dividedGainsAndLosses = gains === 0 || losses === 0 ? 0 : gains / losses;
-            //                 rsi14 = 100 - 100 / (1 + dividedGainsAndLosses)
+                            dividedGainsAndLosses = gains === 0 || losses === 0 ? 0 : gains / losses;
+                            rsi14 = 100 - 100 / (1 + dividedGainsAndLosses)
 
-            //                 candleMeta.previous14Gains = gains;
-            //                 candleMeta.previous14Losses = losses;
-            //                 candleMeta.rsi14 = rsi14;
-            //             } else {
-            //                 const message = `no previews candle meta found. candleId: ${candle.id}, interval: ${interval}, symbol: ${candle.symbol}`;
-            //                 this.logger.error(message);
-            //                 await job.log(message);
-            //             }
-            //         }
-            //     }
-            // }
+                            candleMeta.previous14Gains = gains;
+                            candleMeta.previous14Losses = losses;
+                            candleMeta.rsi14 = rsi14;
+                        } else {
+                            const message = `no previews candle meta found. candleId: ${candle.id}, interval: ${interval}, symbol: ${candle.symbol}`;
+                            this.logger.error(message);
+                            await job.log(message);
+                        }
+                    }
+                }
+            }
 
             // impulse/correction
             const previousCandle = await this.candleService.getPreviousCandle(candle.symbol, interval, candle.closeTime);
@@ -271,7 +271,7 @@ export class FourHoursCandle_CalculationsProcessor {
             the14thCandleMeta.rsi14 = rsi14;
             await this.candleMetaService.storeOrUpdate([the14thCandleMeta], interval);
 
-            symbolMeta.rsi14PrerequisitesCalculated = true;
+            symbolMeta.t4hRsi14PrerequisitesCalculated = true;
             await this.symbolMetaService.storeOrUpdate([symbolMeta]);
 
             return true;
