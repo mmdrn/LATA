@@ -11,26 +11,25 @@ import { Interval } from "../../BLL/Enums/Interval.enum";
 export class SymbolsController {
     constructor(
         private readonly symbolService: SymbolService,
-        @InjectQueue("OneMinuteCandle_Preprocessings") private readonly oneMinuteCandlePreprocessingsQueue: Queue,
-        @InjectQueue("ThreeMinutesCandle_Preprocessings") private readonly threeMinutesCandlePreprocessingsQueue: Queue,
-        @InjectQueue("FiveMinutesCandle_Preprocessings") private readonly fiveMinutesCandlePreprocessingsQueue: Queue,
-        @InjectQueue("FifteenMinutesCandle_Preprocessings") private readonly fifteenMinutesCandlePreprocessingsQueue: Queue,
-        @InjectQueue("ThirtyMinutesCandle_Preprocessings") private readonly thirtyMinutesCandlePreprocessingsQueue: Queue,
-        @InjectQueue("OneHourCandle_Preprocessings") private readonly oneHourCandlePreprocessingsQueue: Queue,
-        @InjectQueue("TwoHoursCandle_Preprocessings") private readonly twoHoursCandlePreprocessingsQueue: Queue,
-        @InjectQueue("FourHoursCandle_Preprocessings") private readonly fourHoursCandlePreprocessingsQueue: Queue,
+        @InjectQueue("OneMinuteCandle_Fetches") private readonly oneMinuteCandleFetchQueue: Queue,
+        @InjectQueue("ThreeMinutesCandle_Fetches") private readonly threeMinutesCandleFetchQueue: Queue,
+        @InjectQueue("FiveMinutesCandle_Fetches") private readonly fiveMinutesCandleFetchQueue: Queue,
+        @InjectQueue("FifteenMinutesCandle_Fetches") private readonly fifteenMinutesCandleFetchQueue: Queue,
+        @InjectQueue("ThirtyMinutesCandle_Fetches") private readonly thirtyMinutesCandleFetchQueue: Queue,
+        @InjectQueue("OneHourCandle_Fetches") private readonly oneHourCandleFetchQueue: Queue,
+        @InjectQueue("TwoHoursCandle_Fetches") private readonly twoHoursCandleFetchQueue: Queue,
         @InjectQueue("FourHoursCandle_Fetches") private readonly fourHoursCandleFetchQueue: Queue,
-        @InjectQueue("SixHoursCandle_Preprocessings") private readonly sixHoursCandlePreprocessingsQueue: Queue,
-        @InjectQueue("EightHoursCandle_Preprocessings") private readonly eightHoursCandlePreprocessingsQueue: Queue,
-        @InjectQueue("TwelveHoursCandle_Preprocessings") private readonly twelveHoursCandlePreprocessingsQueue: Queue,
-        @InjectQueue("OneDayCandle_Preprocessings") private readonly oneDayCandlePreprocessingsQueue: Queue,
+        @InjectQueue("SixHoursCandle_Fetches") private readonly sixHoursCandleFetchQueue: Queue,
+        @InjectQueue("EightHoursCandle_Fetches") private readonly eightHoursCandleFetchQueue: Queue,
+        @InjectQueue("TwelveHoursCandle_Fetches") private readonly twelveHoursCandleFetchQueue: Queue,
         @InjectQueue("OneDayCandle_Fetches") private readonly oneDayCandleFetchQueue: Queue,
-        @InjectQueue("ThreeDaysCandle_Preprocessings") private readonly threeDaysCandlePreprocessingsQueue: Queue,
-        @InjectQueue("OneWeekCandle_Preprocessings") private readonly oneWeekCandlePreprocessingsQueue: Queue,
-        @InjectQueue("OneMonthCandle_Preprocessings") private readonly oneMonthCandlePreprocessingsQueue: Queue,
+        @InjectQueue("ThreeDaysCandle_Fetches") private readonly threeDaysCandleFetchQueue: Queue,
+        @InjectQueue("OneWeekCandle_Fetches") private readonly oneWeekCandleFetchQueue: Queue,
+        @InjectQueue("OneMonthCandle_Fetches") private readonly oneMonthCandleFetchQueue: Queue,
     ) { }
 
-    @Get("update-list")
+    //TODO: handle update existing symbols.
+    @Get("update")
     async updateSymbolsList(@Query("exchange") _exchange: string): Promise<APIResponse> {
         let exchange: number = null;
         {
@@ -60,27 +59,6 @@ export class SymbolsController {
         this.symbolService.setExchange(exchange);
         const symbols = await this.symbolService.fetchAllSymbolsFromRemote();
 
-        // technical debt: must avoid to insert duplicate symbols.
-        // technical debt: must avoid to insert duplicate symbols.
-        // technical debt: must avoid to insert duplicate symbols.
-        // const existSymbolsQuery: ExistSymbol[] = [];
-        // for (const symbol of symbols) {
-        //     existSymbolsQuery.push({
-        //         exist: null,
-        //         field: "symbol",
-        //         value: symbol.symbol,
-        //     })
-        // }
-        // const existSymbolsResult: ExistSymbol[] = await this.symbolService.existSymbols(existSymbolsQuery);
-        // const duplicateSymbols: Symbol[] = [];
-        // for (const symbol of existSymbolsResult.filter(s => s.exist)) {
-        //     const index = symbols.findIndex(s => s.symbol === symbol.value);
-        //     if (index > -1) {
-        //         duplicateSymbols.push(symbols[index]);
-        //         symbols.splice(index, 1);
-        //     }
-        // }
-
         try {
             const insertedSymbols = await this.symbolService.insertSymbols(symbols);
 
@@ -88,8 +66,17 @@ export class SymbolsController {
                 success: true,
                 message: "symbols successfully updated.",
                 data: {
-                    // duplicates: duplicateSymbols,
-                    newSymbols: insertedSymbols
+                    new: {
+                        count: insertedSymbols.length,
+                        items: insertedSymbols.map(s => {
+                            return {
+                                "id": s.id,
+                                "symbol": s.symbol,
+                                "baseAsset": s.baseAsset,
+                                "quoteAsset": s.quoteAsset,
+                            }
+                        })
+                    }
                 }
             }
         } catch (error) {
@@ -101,7 +88,7 @@ export class SymbolsController {
         }
     }
 
-    @Get("get-list")
+    @Get("get")
     async getAllSymbols(
         @Query("exchange") _exchange: string,
         @Query("quoteAsset") quoteAsset: string,
@@ -151,10 +138,7 @@ export class SymbolsController {
         }
     }
 
-    /**
-     * will manually add symbols to the targeted interval queue, for fetching their candles.
-     */
-    @Get("manual-fetch")
+    @Get("fetchCandles")
     async manualFetch(
         @Query("exchange") _exchange: string,
         @Query("quoteAsset") quoteAsset: string,
@@ -221,9 +205,89 @@ export class SymbolsController {
         const symbols = await this.symbolService.findAllSymbols(quoteAsset, status);
 
         switch (interval) {
+            case Interval.OneMinute: {
+                for (const symbol of symbols) {
+                    await this.oneMinuteCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.ThreeMinutes: {
+                for (const symbol of symbols) {
+                    await this.threeMinutesCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.FiveMinutes: {
+                for (const symbol of symbols) {
+                    await this.fiveMinutesCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.FifteenMinutes: {
+                for (const symbol of symbols) {
+                    await this.fifteenMinutesCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.ThirtyMinutes: {
+                for (const symbol of symbols) {
+                    await this.thirtyMinutesCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.OneHour: {
+                for (const symbol of symbols) {
+                    await this.oneHourCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.TwoHour: {
+                for (const symbol of symbols) {
+                    await this.twoHoursCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
             case Interval.FourHour: {
                 for (const symbol of symbols) {
                     await this.fourHoursCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.SixHour: {
+                for (const symbol of symbols) {
+                    await this.sixHoursCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.EightHour: {
+                for (const symbol of symbols) {
+                    await this.eightHoursCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.TwelveHour: {
+                for (const symbol of symbols) {
+                    await this.twelveHoursCandleFetchQueue.add("default_queue", {
                         symbol: symbol,
                     })
                 }
@@ -237,6 +301,30 @@ export class SymbolsController {
                 }
                 break;
             }
+            case Interval.ThreeDay: {
+                for (const symbol of symbols) {
+                    await this.threeDaysCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.OneWeek: {
+                for (const symbol of symbols) {
+                    await this.oneWeekCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
+            case Interval.OneMonth: {
+                for (const symbol of symbols) {
+                    await this.oneMonthCandleFetchQueue.add("default_queue", {
+                        symbol: symbol,
+                    })
+                }
+                break;
+            }
         }
 
         return {
@@ -244,72 +332,4 @@ export class SymbolsController {
             message: "added.",
         }
     }
-
-    // @Get("preprocessings")
-    // async preprocessings(
-    //     @Query("exchange") _exchange: string,
-    //     @Query("quoteAsset") quoteAsset: string,
-    //     @Query("status") status: "" | "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK"
-    // ): Promise<APIResponse> {
-    //     let exchange: number = null;
-    //     {
-    //         try {
-    //             exchange = parseInt(_exchange);
-    //             const enumHelper = new EnumHelper();
-    //             if (!enumHelper.hasValue(exchange, Exchanges)) {
-    //                 return {
-    //                     success: false,
-    //                     message: "this is an invalid exchange!!",
-    //                     data: {
-    //                         exchange
-    //                     }
-    //                 }
-    //             }
-    //         } catch (error) {
-    //             return {
-    //                 success: false,
-    //                 message: "this is an invalid exchange!!",
-    //                 data: {
-    //                     exchange
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     if (!this.symbolService.setExchange(exchange)) {
-    //         return {
-    //             success: false,
-    //             message: "internal server error.",
-    //         }
-    //     }
-
-    //     const symbols = await this.symbolService.findAllSymbols(quoteAsset, status);
-
-    //     for (const symbol of [symbols[0]]) {
-    //         const promises = []
-
-    //         promises.push(this.oneMinuteCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.threeMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.fiveMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.fifteenMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.thirtyMinutesCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.oneHourCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.twoHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.fourHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.sixHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.eightHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.twelveHoursCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.oneDayCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.threeDaysCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.oneWeekCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-    //         promises.push(this.oneMonthCandlePreprocessingsQueue.add("default_queue", { symbol: symbol }))
-
-    //         await Promise.all(promises);
-    //     }
-
-    //     return {
-    //         message: "",
-    //         success: true
-    //     }
-    // }
 }

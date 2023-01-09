@@ -112,7 +112,7 @@ export class OneDayCandle_CalculationsProcessor {
         }
 
         if (Number.isFinite(candleMeta.difference)) {
-            // rsi14 prerequisites
+            // // rsi14 prerequisites
             if (!symbolMeta.t1dRsi14PrerequisitesCalculated) {
                 const result = await this.calculateRSI14Prerequisites(symbol, candle, interval, symbolMeta);
                 if (!result) {

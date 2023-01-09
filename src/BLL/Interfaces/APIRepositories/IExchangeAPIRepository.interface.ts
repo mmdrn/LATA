@@ -6,4 +6,6 @@ export default interface IExchangeAPIRepository {
     fetchAllSymbols(): Promise<Symbol[]>;
 
     fetchCandles(symbol: string, interval: Interval, startTime: number, limit: number, ignoreCurrentCandle: Boolean): Promise<Candle[]>;
+
+    fetchSymbolPrice(symbol: string): Promise<number | null>;
 }

@@ -147,7 +147,7 @@ export default class CandleDBRepository implements ICandleDBRepository {
             }
         }
 
-        if (candles === null || candles.length === 0) return null;
+        if (!candles || candles.length === 0) return null;
 
         return MapCandleEntitiesToCandles(candles);
     }

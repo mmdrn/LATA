@@ -9,6 +9,15 @@ import Candle from "../../../BLL/Models/Candle.model";
 @Injectable()
 export default class Binance_ExchangeAPIRepository implements IExchangeAPIRepository {
 
+    async fetchSymbolPrice(symbol: string): Promise<number | null> {
+        const clinet = new MainClient({});
+        const result = await clinet.getSymbolPriceTicker({
+            symbol: symbol.toUpperCase()
+        })
+
+        return parseFloat(result["price"])
+    }
+
     async fetchCandles(symbol: string, interval: Interval, startTime: number, limit: number, ignoreCurrentCandle: Boolean = true): Promise<Candle[]> {
         const clinet = new MainClient({});
         const result = await clinet.getKlines({
@@ -84,10 +93,10 @@ export default class Binance_ExchangeAPIRepository implements IExchangeAPIReposi
                 id: null,
                 symbol: symbol,
                 openTime: candle[0],
-                openPrice: candle[1],
-                highPrice: candle[2],
-                lowPrice: candle[3],
-                closePrice: candle[4],
+                openPrice: parseFloat(candle[1]),
+                highPrice: parseFloat(candle[2]),
+                lowPrice: parseFloat(candle[3]),
+                closePrice: parseFloat(candle[4]),
                 volume: candle[5],
                 closeTime: candle[6],
                 quoteAssetVolume: candle[7],
